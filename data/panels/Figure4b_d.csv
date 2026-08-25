@@ -1,0 +1,3 @@
+Panel,Gene,UniProt entry,PDB ID,Visualization,APBS potential minimum (kT/e),APBS potential maximum (kT/e),Orientations shown,Structure source,Figure source,Notes
+Figure 4b,LIG4,P49917,3W5O,Electrostatic surface potential generated with APBS,-10,10,2,RCSB PDB 3W5O; UniProt P49917,Figure4_v1.pdf,Qualitative surface-electrostatic visualization; no APBS grid table was found in the updated result directory.
+Figure 4d,IGHMBP2,P38935,4B3J,Electrostatic surface potential generated with APBS,-10,10,2,RCSB PDB 4B3J; UniProt P38935,Figure4_v1.pdf,Qualitative surface-electrostatic visualization; no APBS grid table was found in the updated result directory.

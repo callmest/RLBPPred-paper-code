@@ -1,0 +1,35 @@
+release: "1.0.0"
+random_seed: 42
+
+benchmark:
+  recurrent_positive_candidates: 407
+  final_positive: 376
+  final_negative: 9109
+  sequence_identity_threshold: 0.35
+  sequence_coverage_threshold: 0.90
+  minimum_length: 50
+
+ensemble:
+  model: "SaProt-650M-AF2 + MLP"
+  rounds: 300
+  positive_to_negative_sampling_ratio: "1:1"
+  validation_fraction: 0.20
+  pooling: "global mean"
+
+reported_performance:
+  auroc: 0.9925
+  auprc: 0.9264
+
+screening:
+  adopted_threshold: 0.85
+  high_confidence_candidates: 342
+  one_percent_fpr_threshold: 0.8583
+
+database:
+  human_records: 20075
+  mouse_records: 17002
+  total_records: 37077
+  representative_query:
+    gene: "TOP1"
+    uniprot_accession: "P11387"
+    confidence: 0.999743

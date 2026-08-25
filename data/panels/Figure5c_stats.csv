@@ -1,0 +1,4 @@
+kruskal_wallis_p,group_1,group_2,n_1,n_2,u_statistic,p_value,rank_biserial_correlation,p_adjusted_bh
+4.0055429e-47,Novel_RLBP,Known_RLBP,342,376,62465,0.50732886,-0.028477666,0.50732886
+4.0055429e-47,Novel_RLBP,Non_RLBP,342,9080,2018699.5,2.6235446e-23,0.30013879,3.9353169e-23
+4.0055429e-47,Known_RLBP,Non_RLBP,376,9080,2255698,7.7669144e-29,0.32140899,2.3300743e-28

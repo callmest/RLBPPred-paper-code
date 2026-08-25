@@ -1,0 +1,48 @@
+name: Validate reproducibility package
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-and-syntax:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+          cache-dependency-path: |
+            requirements-figures.txt
+            pyproject.toml
+
+      - name: Install validation tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-figures.txt
+          python -m pip install "cffconvert>=2.0,<3" "packaging>=23,<27" "PyYAML>=6,<7" "tomli>=2,<3"
+
+      - name: Validate metadata and Python syntax
+        run: make validate
+
+      - name: Validate released panel data
+        run: make validate-release
+
+      - name: Rebuild all computational panels
+        run: make reproduce-figures OUTPUT_DIR="$RUNNER_TEMP/rlbppred-figures"
+
+      - name: Report unresolved release placeholders
+        run: |
+          if grep -RIn "TODO" CITATION.cff pyproject.toml THIRD_PARTY_NOTICES.md; then
+            echo "Resolve the listed release placeholders before publishing a tagged release."
+          fi

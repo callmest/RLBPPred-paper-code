@@ -1,0 +1,56 @@
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python caches and build products
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Local environments and credentials
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Generated outputs (source data and curated inputs remain trackable)
+outputs/
+results/generated/
+figures/generated/
+reports/generated/
+
+# Large or machine-specific inputs
+data/raw/
+data/external/
+models/
+model/
+checkpoints/
+*.ckpt
+*.pth
+*.pt
+*.safetensors
+
+# Notebook checkpoints
+.ipynb_checkpoints/

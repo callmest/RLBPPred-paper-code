@@ -1,0 +1,33 @@
+name: rlbppred-training
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.10
+  - pip>=24
+  - pip:
+      # Shared analysis and figure dependencies.
+      - -r requirements-figures.txt
+
+      # Downstream training and inference dependencies. These are compatible
+      # ranges rather than a claim about unrecoverable historical patch versions.
+      - torch>=2.1,<3
+      - tqdm>=4.66,<5
+      - xgboost>=2.0,<4
+      - lightgbm>=4.0,<5
+
+# GPU note:
+# Install a PyTorch build that matches the host CUDA driver before running model
+# training or embedding extraction. Follow the official PyTorch and PyG wheel
+# selectors; a CUDA build is intentionally not hard-coded in this portable file.
+#
+# Embedding-environment note:
+# Embedding extraction is intentionally excluded from this downstream-training
+# environment. EvolutionaryScale ESM-C and facebookresearch/fair-esm expose the
+# same top-level `esm` namespace and should not be installed together blindly.
+# PST and SaProt also relied on separate historical source trees. Before public
+# release, define separate, commit-pinned environments for ESM-C and PST/SaProt,
+# record every checkpoint checksum, and document their tested CUDA/PyG builds.
+# Foldseek and MEME Suite/STREME are external executables and are not installed
+# by Conda here.

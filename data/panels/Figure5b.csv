@@ -1,0 +1,16 @@
+Database,Group,Overlap count,Group total,Overlap (%),Odds ratio,P value
+PhaSepDB,Novel predicted RLBPs,36,342,10.53,6.71,1.99e-16
+PhaSepDB,Known RLBPs,103,376,27.39,21.51,4.47e-79
+PhaSepDB,Non-RLBPs,157,9109,1.72,1,5.23e-01
+DrLLPS,Novel predicted RLBPs,132,342,38.6,5.51,4.13e-41
+DrLLPS,Known RLBPs,329,376,87.5,61.34,9.99e-249
+DrLLPS,Non-RLBPs,933,9109,10.24,1,5.10e-01
+LLPSDB,Novel predicted RLBPs,11,342,3.22,21.59,3.36e-10
+LLPSDB,Known RLBPs,24,376,6.38,44.29,6.41e-25
+LLPSDB,Non-RLBPs,14,9109,0.15,1,5.75e-01
+PhaSePro,Novel predicted RLBPs,2,342,0.58,8.92,3.16e-02
+PhaSePro,Known RLBPs,14,376,3.72,58.67,5.83e-16
+PhaSePro,Non-RLBPs,6,9109,0.07,1,6.13e-01
+Union,Novel predicted RLBPs,152,342,44.44,6.28,6.15e-51
+Union,Known RLBPs,339,376,90.16,71.94,1.25e-253
+Union,Non-RLBPs,1029,9109,11.3,1,5.09e-01

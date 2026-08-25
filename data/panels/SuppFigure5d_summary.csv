@@ -1,0 +1,61 @@
+group,group_label,n_proteins,standard_residue_count,excluded_nonstandard_residues,amino_acid,class,pooled_percentage
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,N,Hydrophilic,3.934425
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,E,Acidic,7.913776
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,D,Acidic,5.148277
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,H,Basic,2.623939
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,K,Basic,7.249208
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,R,Basic,5.68951
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,W,Hydrophobic,0.828166
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,F,Hydrophobic,3.09863
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,M,Hydrophobic,2.203922
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,L,Hydrophobic,8.452465
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,I,Hydrophobic,4.302734
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,V,Hydrophobic,5.700953
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,A,Hydrophobic,7.050008
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,P,Hydrophobic,6.549039
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,G,Hydrophilic,6.318051
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,C,Hydrophilic,1.742794
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,Y,Hydrophilic,2.484075
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,T,Hydrophilic,5.228381
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,S,Hydrophilic,8.443141
+Novel_RLBP,Novel predicted RLBPs,342,235943,0,Q,Hydrophilic,5.038505
+Known_RLBP,Known RLBPs,376,234811,0,N,Hydrophilic,3.656984
+Known_RLBP,Known RLBPs,376,234811,0,E,Acidic,8.171253
+Known_RLBP,Known RLBPs,376,234811,0,D,Acidic,5.450341
+Known_RLBP,Known RLBPs,376,234811,0,H,Basic,2.197938
+Known_RLBP,Known RLBPs,376,234811,0,K,Basic,8.029011
+Known_RLBP,Known RLBPs,376,234811,0,R,Basic,6.406003
+Known_RLBP,Known RLBPs,376,234811,0,W,Hydrophobic,0.857711
+Known_RLBP,Known RLBPs,376,234811,0,F,Hydrophobic,3.214074
+Known_RLBP,Known RLBPs,376,234811,0,M,Hydrophobic,2.348697
+Known_RLBP,Known RLBPs,376,234811,0,L,Hydrophobic,8.417408
+Known_RLBP,Known RLBPs,376,234811,0,I,Hydrophobic,4.492123
+Known_RLBP,Known RLBPs,376,234811,0,V,Hydrophobic,5.994608
+Known_RLBP,Known RLBPs,376,234811,0,A,Hydrophobic,7.076329
+Known_RLBP,Known RLBPs,376,234811,0,P,Hydrophobic,5.834906
+Known_RLBP,Known RLBPs,376,234811,0,G,Hydrophilic,6.963047
+Known_RLBP,Known RLBPs,376,234811,0,C,Hydrophilic,1.360243
+Known_RLBP,Known RLBPs,376,234811,0,Y,Hydrophilic,2.702599
+Known_RLBP,Known RLBPs,376,234811,0,T,Hydrophilic,4.894149
+Known_RLBP,Known RLBPs,376,234811,0,S,Hydrophilic,7.4149
+Known_RLBP,Known RLBPs,376,234811,0,Q,Hydrophilic,4.517676
+Non_RLBP,Non-RLBPs,9109,4356393,0,N,Hydrophilic,3.501521
+Non_RLBP,Non-RLBPs,9109,4356393,0,E,Acidic,6.979536
+Non_RLBP,Non-RLBPs,9109,4356393,0,D,Acidic,4.68842
+Non_RLBP,Non-RLBPs,9109,4356393,0,H,Basic,2.597034
+Non_RLBP,Non-RLBPs,9109,4356393,0,K,Basic,5.27255
+Non_RLBP,Non-RLBPs,9109,4356393,0,R,Basic,5.701781
+Non_RLBP,Non-RLBPs,9109,4356393,0,W,Hydrophobic,1.370538
+Non_RLBP,Non-RLBPs,9109,4356393,0,F,Hydrophobic,3.616547
+Non_RLBP,Non-RLBPs,9109,4356393,0,M,Hydrophobic,2.07316
+Non_RLBP,Non-RLBPs,9109,4356393,0,L,Hydrophobic,10.43657
+Non_RLBP,Non-RLBPs,9109,4356393,0,I,Hydrophobic,4.18594
+Non_RLBP,Non-RLBPs,9109,4356393,0,V,Hydrophobic,5.985984
+Non_RLBP,Non-RLBPs,9109,4356393,0,A,Hydrophobic,7.139002
+Non_RLBP,Non-RLBPs,9109,4356393,0,P,Hydrophobic,6.447536
+Non_RLBP,Non-RLBPs,9109,4356393,0,G,Hydrophilic,6.564146
+Non_RLBP,Non-RLBPs,9109,4356393,0,C,Hydrophilic,2.375383
+Non_RLBP,Non-RLBPs,9109,4356393,0,Y,Hydrophilic,2.631397
+Non_RLBP,Non-RLBPs,9109,4356393,0,T,Hydrophilic,5.327274
+Non_RLBP,Non-RLBPs,9109,4356393,0,S,Hydrophilic,8.350394
+Non_RLBP,Non-RLBPs,9109,4356393,0,Q,Hydrophilic,4.755287

@@ -1,0 +1,11 @@
+Rank,Consensus,Width,Sites (n),E-value,Category,Annotation,Significant (E<0.05)
+1,QVKIWFQNRRMKW,13,31,6.60e-06,Homeodomain (HTH),Homeodomain recognition helix (helix III),Yes
+2,TLELEKEFHFNRYL,14,16,2.90e-03,Homeodomain (HTH),HTH DNA-binding domain,Yes
+3,QQPPQPQTQ,9,29,1.40e-02,Gln/Pro-rich IDR,Q/P-rich transactivation domain,Yes
+4,KRKR,4,53,4.60e-02,Basic / nucleic acid binding,Polybasic NLS-like motif,Yes
+5,AKEK,4,136,1.40e-01,Basic / nucleic acid binding,Lysine-spaced charge motif,No
+6,GTGKTL,6,33,1.80e-01,Walker A / P-loop,Walker A box (GxxGKT); NTPase,No
+7,SESE,4,29,3.50e-01,Ser/Glu repeat,Ser-Glu alternating charge,No
+8,KKEL,4,62,5.60e-01,Basic / nucleic acid binding,Lysine-rich coiled-coil,No
+9,DEEEEEEEEEDDED,14,26,8.10e-01,Acidic stretch,Poly-Glu/Asp acidic stretch,No
+10,KKKAKM,6,80,1.10e+00,Basic / nucleic acid binding,Poly-Lys histone-tail like,No

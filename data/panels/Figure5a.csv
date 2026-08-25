@@ -1,0 +1,16 @@
+Group,Category,Count,Group total,Percentage (%)
+Novel predicted RLBPs,Writer,11,342,3.2164
+Novel predicted RLBPs,Reader,11,342,3.2164
+Novel predicted RLBPs,Eraser,12,342,3.5088
+Novel predicted RLBPs,Remodeler,14,342,4.0936
+Novel predicted RLBPs,Other chromatin,8,342,2.3392
+Known RLBPs,Writer,34,376,9.0426
+Known RLBPs,Reader,9,376,2.3936
+Known RLBPs,Eraser,3,376,0.7979
+Known RLBPs,Remodeler,17,376,4.5213
+Known RLBPs,Other chromatin,8,376,2.1277
+Non-RLBPs,Writer,35,9109,0.3842
+Non-RLBPs,Reader,2,9109,0.022
+Non-RLBPs,Eraser,11,9109,0.1208
+Non-RLBPs,Remodeler,6,9109,0.0659
+Non-RLBPs,Other chromatin,11,9109,0.1208

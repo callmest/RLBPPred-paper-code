@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated manuscript and this repository."
+title: "RLBPPred: Protein language model-based prediction of R-loop-binding proteins"
+type: software
+authors:
+  - family-names: "Shen"
+    given-names: "Tao"
+  - family-names: "Jun"
+    given-names: "Mencius"
+  - family-names: "Jin"
+    given-names: "Shuo"
+  - family-names: "Feng"
+    given-names: "Huijuan"
+repository-code: "https://github.com/callmest/RLBPPred-reproducibility"
+url: "https://github.com/callmest/RLBPPred-reproducibility"
+license: MIT
+version: "1.0.0"
+date-released: "2026-08-25"
+abstract: >-
+  Code, environment specifications, and workflow documentation for reproducing
+  the computational analyses and manuscript figures associated with RLBPPred.
+keywords:
+  - R-loop-binding protein
+  - protein language model
+  - protein classification
+  - computational reproducibility

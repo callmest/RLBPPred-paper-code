@@ -1,0 +1,274 @@
+[
+  {
+    "panel_data": "Figure1b",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure1b",
+    "description": "Binary membership of normalized reported gene identifiers across five human R-loop proteomic datasets (UpSet source).",
+    "rows": 1430,
+    "sha256": "65076c2e0c529695779dac14b2402bb2dc70608a11b047b6223f2ced0594ba5b"
+  },
+  {
+    "panel_data": "Figure2b",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure2b",
+    "description": "Source data for Figure 2b. AUPRC heatmap values",
+    "rows": 10,
+    "sha256": "0d84e049a0ff1a1cf5bbdfffd870376da65ecbfcda72ae552784c0702ed3873b"
+  },
+  {
+    "panel_data": "Figure3a",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure3a",
+    "description": "Source data for Figure 3a. ROC curve coordinates for training-filter comparison",
+    "rows": 692,
+    "sha256": "8e4ae2a2a12c7d91a24b3042f97b348b2d29a469e4e7fab48c9f731c17b0468b"
+  },
+  {
+    "panel_data": "Figure3b",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure3b",
+    "description": "Source data for Figure 3b. ROC curve coordinates for RLBPPred and baseline models",
+    "rows": 175,
+    "sha256": "6c5114de19c60c58bb6ad219bf65e050c7b708100e03543f43d06baf29b4bab0"
+  },
+  {
+    "panel_data": "Figure3c",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure3c",
+    "description": "Source data for Figure 3c. Mouse predicted-probability summaries",
+    "rows": 3,
+    "sha256": "7b237220b4cc960f0165fa9b3a9481a56d724f75832dc85b588389ebbc7870b9"
+  },
+  {
+    "panel_data": "Figure3d",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure3d",
+    "description": "Source data for Figure 3d. Human predicted-probability summaries",
+    "rows": 4,
+    "sha256": "9e912ed4f1b7639c9b3107e9aedd541c2f1e7f8ccd2e8812f78d56921650e194"
+  },
+  {
+    "panel_data": "Figure3e",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure3e",
+    "description": "Source data for Figure 3e. Functional enrichment of predicted RLBPs",
+    "rows": 100,
+    "sha256": "1657c54aad017d098d24f51f2977cfcd7c54c1911c89eccea01d2e425083f81a"
+  },
+  {
+    "panel_data": "Figure4a_c",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure4a_c",
+    "description": "Source data for Figure 4a/c. Wet-lab validation candidate metadata",
+    "rows": 2,
+    "sha256": "0faf3a602fd1111c31f5b0b0eb4e9813fe3d3696c11c070e2b54e94421afb18c"
+  },
+  {
+    "panel_data": "Figure4b_d",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure4b_d",
+    "description": "Source data for Figure 4b/d. Structure and APBS metadata",
+    "rows": 2,
+    "sha256": "bddd67d1c43d8199ef1e9c3869834042ab6bb4bf3dcb5096ac8989f96c1d03a1"
+  },
+  {
+    "panel_data": "Figure5a",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure5a",
+    "description": "Source data for Figure 5a. EpiFactors category composition",
+    "rows": 15,
+    "sha256": "bb79f6a0d3515ba5e758e2348c02878022ffb6901305bd8c82320b1450d1cb5e"
+  },
+  {
+    "panel_data": "Figure5b",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure5b",
+    "description": "Source data for Figure 5b. LLPS database overlap and enrichment",
+    "rows": 15,
+    "sha256": "2a89b5549da12b2cff34e4fc738dda89f7584fa32bb6bdf29cfe58deaecaeb75"
+  },
+  {
+    "panel_data": "Figure5c_raw",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure5c_raw",
+    "description": "Source data for Figure 5c. Per-protein MobiDB disorder fractions",
+    "rows": 9827,
+    "sha256": "37663a557c6117f1fa4a16dba7ceb57e872bf31fcd5926fcee2282a48d04926f"
+  },
+  {
+    "panel_data": "Figure5c_stats",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure5c_stats",
+    "description": "Source data for Figure 5c. MobiDB disorder statistical tests",
+    "rows": 3,
+    "sha256": "1be862ba5742cc7d63f3d6b71a6eb1fc9717d2a29e7a8c84b9fb62647457afb2"
+  },
+  {
+    "panel_data": "Figure5c_summary",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure5c_summary",
+    "description": "Source data for Figure 5c. MobiDB disorder group summaries",
+    "rows": 3,
+    "sha256": "8dd4918b7150d881170a67d3493a83f00837f2d2e60d3005c0c850672037ae29"
+  },
+  {
+    "panel_data": "Figure5d",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure5d",
+    "description": "Source data for Figure 5d. De novo motif enrichment",
+    "rows": 10,
+    "sha256": "e764f6b4dd015ea233290f043bfb5315aad8d7338a9b457dc754b5987461b5f8"
+  },
+  {
+    "panel_data": "Figure6a_b",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "Figure6a_b",
+    "description": "Source data for Figure 6a/b. RLBPPredDB scope and representative queries",
+    "rows": 10,
+    "sha256": "ef9bbbe9a7fe1e9b8bb40cd6701122c51b159d54f8a9638f4dc1d47f25a00ef4"
+  },
+  {
+    "panel_data": "SuppFigure1a",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure1a",
+    "description": "Source data for Supplementary Figure 1a. Negative-set exclusion UpSet membership matrix",
+    "rows": 20435,
+    "sha256": "3e6c601375b77be2fb8331c3986c250b1e7e3ef55773deb1fe381ca9681abbbe"
+  },
+  {
+    "panel_data": "SuppFigure1b",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure1b",
+    "description": "Source data for Supplementary Figure 1b. GO enrichment analysis",
+    "rows": 14516,
+    "sha256": "bd830c062134ce522bcea0a7498bfc8ffd4a2ebc6c5a50d57ff059bfa9f54613"
+  },
+  {
+    "panel_data": "SuppFigure1c",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure1c",
+    "description": "Source data for Supplementary Figure 1c. Domain enrichment analysis",
+    "rows": 17379,
+    "sha256": "f18d7fd6249b7dfd82fdad1df09034f2509991f53fc9c835a2f6fad1412e4968"
+  },
+  {
+    "panel_data": "SuppFigure2a",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure2a",
+    "description": "Source data for Supplementary Figure 2a. UMAP coordinates",
+    "rows": 61422,
+    "sha256": "7e2b07ebda7dba6f68b3904eecd5083476f897d6b707339dba02a4753e058bca"
+  },
+  {
+    "panel_data": "SuppFigure2b",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure2b",
+    "description": "Source data for Supplementary Figure 2b. Model-performance metrics",
+    "rows": 60,
+    "sha256": "5f68df73b565670b9f0ba4ecc290190ec1a92ee50fd29dbba31c5f3faf42264e"
+  },
+  {
+    "panel_data": "SuppFigure2c_ratio",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure2c_ratio",
+    "description": "Source data for Supplementary Figure 2c. Negative:positive-ratio optimization",
+    "rows": 3,
+    "sha256": "84f02f58032579e13d2ff09d8b90bf8c9d578ab11117d64d43d01aea13e4ec7c"
+  },
+  {
+    "panel_data": "SuppFigure2c_rounds",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure2c_rounds",
+    "description": "Source data for Supplementary Figure 2c. Training-round optimization",
+    "rows": 4,
+    "sha256": "746131cce15f8dec3e5ddba1d4e699c6f85ad193746f08011fb55a3a7f1cde7c"
+  },
+  {
+    "panel_data": "SuppFigure2d",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure2d",
+    "description": "Source data for Supplementary Figure 2d. Feature-set comparison",
+    "rows": 3,
+    "sha256": "94866c7e9e31d66a51ef53d31b8905ac735d67e84e91d1fcdcee3e84009e3990"
+  },
+  {
+    "panel_data": "SuppFigure3a",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure3a",
+    "description": "Source data for Supplementary Figure 3a. Confusion-matrix summary",
+    "rows": 4,
+    "sha256": "3bb665a34accc1ae34617fefeef0f3ccc7a9959d88752592bcd5948113eeafab"
+  },
+  {
+    "panel_data": "SuppFigure3b",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure3b",
+    "description": "Source data for Supplementary Figure 3b. Threshold-performance summary",
+    "rows": 300,
+    "sha256": "6fb55ba88228981afb63a45447f1fc2759aa02cdc922cf2a7c33b2668ce8afe3"
+  },
+  {
+    "panel_data": "SuppFigure3c",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure3c",
+    "description": "Source data for Supplementary Figure 3c. Human call-rate summary",
+    "rows": 4,
+    "sha256": "02c4837c790c72c42ec0495e87eb893ca89f5147e9d7b5a84f3b4f0a2741d5ee"
+  },
+  {
+    "panel_data": "SuppFigure3d",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure3d",
+    "description": "Source data for Supplementary Figure 3d. Mouse call-rate summary",
+    "rows": 3,
+    "sha256": "668a9460464ce1ab7cc8a23c8383732ae01954750d1d2c1da14c8779c3edc093"
+  },
+  {
+    "panel_data": "SuppFigure5a",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure5a",
+    "description": "Source data for Supplementary Figure 5a. EpiFactors overall overlap",
+    "rows": 3,
+    "sha256": "0367538f7a264d1c2c8dd8877c8bd71094cc34b25b67b4defd963b002b050936"
+  },
+  {
+    "panel_data": "SuppFigure5b",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure5b",
+    "description": "Source data for Supplementary Figure 5b. EpiFactors category overlap",
+    "rows": 10,
+    "sha256": "55a973a0ed1db58eea81b5fa5ddc593bb27d8e6af0f703693fa6930a90239fd0"
+  },
+  {
+    "panel_data": "SuppFigure5c",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure5c",
+    "description": "Source data for Supplementary Figure 5c. Motif-category summary",
+    "rows": 6,
+    "sha256": "f91555424bfbbde7b86fcd3bf07e0d29b3c96016795a77dfadc063287323045b"
+  },
+  {
+    "panel_data": "SuppFigure5d_raw",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure5d_raw",
+    "description": "Source data for Supplementary Figure 5d. Per-protein amino-acid composition",
+    "rows": 9827,
+    "sha256": "e8f566ab76366f16617985cc99c3551d64b88b963571d54f40e2b1f048f876a7"
+  },
+  {
+    "panel_data": "SuppFigure5d_stats",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure5d_stats",
+    "description": "Source data for Supplementary Figure 5d. Amino-acid composition pairwise statistics",
+    "rows": 60,
+    "sha256": "a3ab51b514da435d83c8e779119ce39e4ec276cf8c44b2295c39621a8bbf0981"
+  },
+  {
+    "panel_data": "SuppFigure5d_summary",
+    "source_workbook": "sourcedata_v3.xlsx",
+    "source_sheet": "SuppFigure5d_summary",
+    "description": "Source data for Supplementary Figure 5d. Amino-acid composition group summaries",
+    "rows": 60,
+    "sha256": "c04fd3fccd7135ea4bc2e594b85989979b7b16842acde8db0cb78f6ed922441b"
+  }
+]

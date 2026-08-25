@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rlbppred-reproducibility"
+version = "1.0.0"
+description = "Reproducible analysis and figure workflows for RLBPPred"
+readme = "README.md"
+requires-python = ">=3.10,<3.12"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Tao Shen" },
+  { name = "Mencius Jun" },
+  { name = "Shuo Jin" },
+  { name = "Huijuan Feng" },
+]
+keywords = [
+  "R-loop-binding protein",
+  "protein language model",
+  "bioinformatics",
+  "reproducibility",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/callmest/RLBPPred-reproducibility"
+
+[project.optional-dependencies]
+dev = [
+  "cffconvert>=2.0,<3",
+  "packaging>=23,<27",
+  "PyYAML>=6,<7",
+  "pytest>=8,<10",
+  "tomli>=2,<3; python_version < '3.11'",
+]
+
+[tool.setuptools]
+packages = []
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+extend-exclude = ["data", "outputs", "results/generated"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

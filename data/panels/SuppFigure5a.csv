@@ -1,0 +1,4 @@
+Group,EpiFactors-annotated,Group total,Percentage (%),Odds ratio (vs Non-RLBP),P value
+Novel predicted RLBPs,56,342,16.3743,27.24,3.62e-49
+Known RLBPs,71,376,18.883,32.39,2.05e-64
+Non-RLBPs,65,9109,0.7136,,

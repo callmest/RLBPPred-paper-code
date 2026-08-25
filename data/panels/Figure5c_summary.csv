@@ -1,0 +1,4 @@
+group,group_label,n_total,n_valid,n_missing,median_percent,q1_percent,q3_percent,mean_percent,sd_percent
+Novel_RLBP,Novel predicted RLBPs,342,342,0,16.036946,3.894673,31.637756,20.391801,19.627598
+Known_RLBP,Known RLBPs,376,376,0,16.97083,4.3433427,32.91844,21.642737,20.655594
+Non_RLBP,Non-RLBPs,9109,9080,29,3.8747276,0,18.011692,12.418981,18.624695

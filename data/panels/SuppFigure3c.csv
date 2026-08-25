@@ -1,0 +1,5 @@
+dataset,percentage_positive,sample_size
+sig_pos_ids,98.14,376
+potential_positive,96.26,1844
+untrained_proteome,29.52,5640
+neg_ids,9.68,9109
