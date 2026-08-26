@@ -12,7 +12,7 @@ This repository separates three different kinds of material:
 ## Top-level navigation
 
 ```text
-RLBPPred-reproducibility/
+RLBPPred/
 ├── README.md
 ├── LICENSE
 ├── CITATION.cff

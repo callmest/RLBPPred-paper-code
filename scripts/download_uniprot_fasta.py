@@ -33,7 +33,7 @@ def main() -> None:
         batch = accessions[start:start + args.batch_size]
         query = "(" + " OR ".join(f"accession:{accession}" for accession in batch) + ")"
         url = ENDPOINT + "?" + urlencode({"format": "fasta", "query": query})
-        request = Request(url, headers={"User-Agent": "RLBPPred-reproducibility/1.0"})
+        request = Request(url, headers={"User-Agent": "RLBPPred/1.0"})
         with urlopen(request, timeout=120) as response:
             chunks.append(response.read().decode("utf-8"))
         if start + args.batch_size < len(accessions):

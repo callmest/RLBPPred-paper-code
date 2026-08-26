@@ -1,6 +1,6 @@
 # RLBPPred reproducibility package
 
-[![Validate reproducibility package](https://github.com/callmest/RLBPPred-reproducibility/actions/workflows/validate.yml/badge.svg)](https://github.com/callmest/RLBPPred-reproducibility/actions/workflows/validate.yml)
+[![Validate reproducibility package](https://github.com/callmest/RLBPPred/actions/workflows/validate.yml/badge.svg)](https://github.com/callmest/RLBPPred/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/Code%20license-MIT-blue.svg)](LICENSE)
 
 This repository contains the code, curated identifiers, panel-level source
@@ -27,8 +27,8 @@ screenshots. Those boundaries are listed in
 Python 3.10 or 3.11 is recommended for the figure-only route.
 
 ```bash
-git clone https://github.com/callmest/RLBPPred-reproducibility.git
-cd RLBPPred-reproducibility
+git clone https://github.com/callmest/RLBPPred.git
+cd RLBPPred
 
 python3 -m venv .venv
 source .venv/bin/activate

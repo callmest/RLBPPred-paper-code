@@ -11,8 +11,8 @@ authors:
     given-names: "Shuo"
   - family-names: "Feng"
     given-names: "Huijuan"
-repository-code: "https://github.com/callmest/RLBPPred-reproducibility"
-url: "https://github.com/callmest/RLBPPred-reproducibility"
+repository-code: "https://github.com/callmest/RLBPPred"
+url: "https://github.com/callmest/RLBPPred"
 license: MIT
 version: "1.0.0"
 date-released: "2026-08-25"
