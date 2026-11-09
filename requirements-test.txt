@@ -1,0 +1,7 @@
+# Offline regression, metadata and figure-replay validation.
+# Install in a disposable validation environment; these are not training pins.
+-r requirements-figures.txt
+pytest>=8,<10
+cffconvert>=2.0,<3
+packaging>=23,<27
+tomli>=2,<3; python_version < "3.11"

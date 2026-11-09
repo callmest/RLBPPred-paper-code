@@ -1,8 +1,8 @@
 # Compatible, minimally bounded environment for regenerating figures from the
 # released panel tables. Training and embedding dependencies are specified in
 # environment-training.yml.
-# The original environment was not frozen; create a lock file after validation on
-# the release machine and archive it with the first tagged release.
+# These are compatible ranges for offline panel replay, not the exact training
+# environment. The observed strict-model core versions are documented separately.
 numpy>=1.24,<3
 pandas>=2.0,<3
 scipy>=1.10,<2
@@ -10,3 +10,4 @@ scikit-learn>=1.3,<2
 matplotlib>=3.7,<4
 openpyxl>=3.1,<4
 upsetplot>=0.9,<1
+PyYAML>=6,<7

@@ -3,6 +3,14 @@
 
 from __future__ import annotations
 
+# Historical 342-candidate analysis, retained for provenance only.
+# Current frozen publication replay: python scripts/reproduce_figures.py --all
+import sys as _historical_sys
+if __name__ == "__main__":
+    if "--historical-342" not in _historical_sys.argv:
+        raise SystemExit("Historical 342-candidate workflow. Use the current frozen replay, or explicitly add --historical-342.")
+    _historical_sys.argv.remove("--historical-342")
+
 import argparse
 import gzip
 import json

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import math
 from pathlib import Path
 from openpyxl import load_workbook
 
@@ -39,7 +40,12 @@ def read_prediction_map(path: Path) -> dict[str, float]:
             prob = row.get('probability')
             if not pid or prob in (None, ''):
                 continue
-            pred[pid] = float(prob)
+            if pid in pred:
+                raise ValueError(f'Duplicate prediction identifier: {pid}')
+            value = float(prob)
+            if not math.isfinite(value) or not 0 <= value <= 1:
+                raise ValueError(f'Invalid prediction for {pid}: {prob}')
+            pred[pid] = value
     return pred
 
 
@@ -125,7 +131,8 @@ def build_rows(records: list[dict[str, str]], pred: dict[str, float], species_la
             'uniprot_page_source': uniprot_url(uid),
             'pdb_page_source': pdb_page_url(uid),
             'alphafold2_page_source': alphafold_url(uid),
-            'confidence': '' if confidence is None else f'{confidence:.6f}',
+            # Preserve model precision; the browser alone rounds for display.
+            'confidence': '' if confidence is None else repr(confidence),
             'reviewed': rec['Reviewed'],
             'entry_name': rec['Entry Name'],
             'length': rec['Length'],
@@ -148,6 +155,8 @@ def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
 
 def main():
     args = parse_args()
+    if args.output_dir.exists() and any(args.output_dir.iterdir()):
+        raise FileExistsError('Choose a new or empty output directory; existing exports are not overwritten.')
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     human_records = read_proteome_sheet(args.human_xlsx)

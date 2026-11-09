@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "strict401_streme_20261027",
+  "streme_version": "5.5.9",
+  "input_counts": {"candidates": 401, "negative_controls": 9109},
+  "internal_split": {"train_positive": 361, "test_positive": 40, "train_negative": 8199, "test_negative": 910},
+  "parameters": {"alphabet": "protein", "min_width": 3, "max_width": 15, "threshold": 0.05, "seed": 0, "holdout_fraction": 0.1},
+  "outputs": {
+    "streme.txt": {
+      "sha256": "71bf3b195d5dda04efe0c923adc2b06e82336e7fa6e8cc9ae67a1702230445fb",
+      "original_sha256": "e4efef0b1ce8adbb30fadfb1529596abd09c2db6aeadf5498a81375a232a2d3c"
+    },
+    "streme.xml": {
+      "sha256": "b7a4ea61040ea276b9bc33bb258770fb7c6460bf9f471045f90f41e3437d680b",
+      "original_sha256": "7252bf16f4f06f21a608aca1764ac354f35e7a5372300528c31ef6a49037f0b4"
+    }
+  },
+  "transformation": "Only the original absolute run-directory prefix was removed from command/input/output path strings. Motif matrices, statistical values and all other content are unchanged.",
+  "reported_motifs": 13,
+  "significant_E_lt_0_05": 7,
+  "displayed_E_le_1_2": 11,
+  "classification": "Descriptive consensus composition: any C first; otherwise (K+R)/length >= 1/3; otherwise Other sequences.",
+  "limitation": "Full-length unmatched-control analysis; sequence-length distribution differs between groups. Functional motif assignments are not established. FASTA inputs are not bundled."
+}

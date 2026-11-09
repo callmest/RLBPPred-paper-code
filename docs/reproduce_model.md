@@ -1,600 +1,165 @@
-# Reproducing RLBPPred training and inference
+# Current strict-model workflow
 
-This document describes the computational path reported in the manuscript and
-the boundary between a fast result check and a full retraining. The scripts in
-`pipeline/` are an inventory of the original analysis code. Their source and
-release paths, checksums, modification status, and preservation notes are
-listed in `pipeline/ORIGIN_MANIFEST.tsv`; their scientific roles and required
-inputs are documented by the stage descriptions below and the script headers.
+This document describes the strict SaProt-650M-AF2 + MLP profile used for the
+current 401-candidate analysis. It does not invoke training when figures are
+redrawn. Historical generic ensemble/pickle entrypoints are not substitutes for
+the current state-dict/scaler interface.
 
-The release does not replace an unverified legacy command with an invented
-one. Before running any stage, inspect its provenance row in
-`ORIGIN_MANIFEST.tsv`, read the script header, and run
-`python <script> --help` when the script provides a command-line interface.
-The manifest records source path, release path, checksum, modification status,
-and a preservation note; exact scientific inputs and outputs remain defined by
-the script and the stage descriptions below. Scripts that depend on hard-coded paths or unpublished
-intermediate files are identified in `docs/known_limitations.md`.
+## 1. Validate and screen frozen predictions (no checkpoint required)
 
-## Reproducibility levels
-
-For downstream training and inference, create the documented Conda environment:
+From the repository root:
 
 ```bash
-conda env create -f environment-training.yml
-conda activate rlbppred-training
+python pipeline/modeling/strict_runtime.py validate
+mkdir -p outputs
+python pipeline/modeling/strict_runtime.py screen --output outputs/candidates401.csv
 ```
 
-`environment-training.yml` intentionally excludes the ESM-C, PST, and SaProt
-embedding stacks because their historical source trees, namespaces, CUDA/PyG
-builds, and checkpoint revisions must be isolated and pinned separately. It is
-an environment specification for downstream modeling, not proof that the full
-embedding pipeline has been reconstructed.
+The output filename must not already exist. The validation checks artifact
+hashes, all benchmark IDs, exact split/order, all 300 sampling rounds,
+human/mouse score coverage and the 401 candidate IDs/scores.
 
-### Level 1: validate the released results
+The strict benchmark contains 376 positives and 9,109 negatives. A fixed
+class-stratified split holds out 75 positives and 1,821 negatives, leaving
+301 positives and 7,288 negatives for training. Each of 300 members uses all
+301 training positives plus 301 training negatives sampled without replacement
+within that round. Different rounds may reuse negatives. The frozen
+`sampling_manifest.json` records the sampled negative IDs and complete shuffled
+training order; `strict_input_manifest.csv` fixes the split.
 
-This level is suitable for reviewers who want to check file integrity, panel
-data, core counts, metrics, predictions, and database exports without
-retraining the 300-member ensemble.
+The 0.5 classification threshold is distinct from discovery. At probability
+>=0.5, held-out confusion counts are TN=1,732, FP=89, FN=4, TP=71.
+AUROC=0.9926487278052353 and AUPRC (average precision)=0.9273565842784495.
+
+Discovery applies probability >=0.98 to the 5,640 scored human
+untrained-proteome entries only. It yields 401 candidates. Empirical FPR is
+computed on the 1,821 held-out negatives, not the full 9,109 negative group:
+1/1,821 = 0.0549149%, below the target of 0.1%. This is an observed held-out
+rate, not a guarantee about population FPR or candidate false-discovery rate.
+
+Human score coverage is 376 significant positives, 1,844 potential positives,
+5,640 untrained proteins and 9,109 negatives (16,969 total). The original input
+lists contain 1,879 potential positives and 5,649 untrained proteins; unscored
+inputs must not be assigned zero. Mouse scores cover 76 significant positives,
+284 potential positives and 16,642 negatives (17,002 total).
+
+## 2. Inference using the trusted frozen checkpoint
+
+Required external assets:
+
+- The approximately 906 MiB `strict_ensemble.pt`, with the exact SHA256 in
+  `data/frozen_model/manifest.json`.
+- Matching globally mean-pooled SaProt-650M-AF2 embeddings. Input NPZ must
+  contain `X` (N x 1,280 numeric embeddings) and unique `protein_id` strings.
+- PyTorch installed in a compatible CPU/GPU environment.
 
 ```bash
-python scripts/validate_release.py --root .
-python scripts/reproduce_figures.py \
-  --all \
-  --data-dir data/panels \
-  --output-dir outputs/figures
+mkdir -p outputs
+python pipeline/modeling/strict_runtime.py predict \
+  --model /trusted/path/strict_ensemble.pt \
+  --input /trusted/path/human_input_cache.npz \
+  --output outputs/human_recomputed.csv --device cpu
 ```
 
-This route uses released panel data and therefore tests the connection between
-reported numerical results and generated plots. It does not independently
-recreate the protein embeddings or model checkpoints.
+The checkpoint format is `state_dict_ensemble_v1`, with 300 MLP states and
+the fitted training scaler arrays. The loader verifies the expected SHA256
+before deserializing the trusted checkpoint. This archive includes NumPy
+objects and therefore requires pickle-enabled loading; never supply untrusted
+weights or a checksum obtained from the same untrusted source.
 
-The manuscript-level constants checked by this route are summarized in
-`configs/paper.yaml`. This file records the release seed, benchmark and filter
-counts, 300-round 1:1 ensemble setting, principal performance values, screening
-thresholds, and database totals. It is a compact reference configuration, not
-a complete training recipe: external release identifiers, exact split
-membership, model architecture/optimizer settings, and large-asset locations
-are not all encoded there.
+The model is 1,280 -> 512 -> 256 -> 1, with batch normalization, ReLU and
+dropout 0.3 in the hidden blocks. The inference interface applies the frozen
+scaler using the original float32 in-place arithmetic and averages the
+300 sigmoid probabilities. It does not fit a scaler to inference inputs.
+Output scores retain full float precision; model/output source files are not
+overwritten. A separately reconstructed trusted checkpoint requires its own
+explicit `--model-sha256`.
 
-### Released accession manifests
+The checkpoint and embeddings are not bundled and no public download endpoint
+is asserted. Local repository QA did not execute the full checkpoint forward
+pass. Frozen cross-machine candidate comparisons are available in
+`candidates_401.csv` (`probability` versus `probability_L40S`).
 
-`data/model_inputs/` contains one reviewed UniProt accession per line for the
-following manuscript groups:
+## 3. Optional training reconstruction
 
-| Released list | Records |
-|---|---:|
-| `recurrent_positive_ids.txt` | 407 |
-| `significant_positive_ids.txt` | 376 |
-| `negative_ids.txt` | 9,109 |
-| `potential_positive_ids.txt` | 1,879 |
-| `untrained_proteome_ids.txt` | 5,649 |
-| `high_confidence_candidate_ids.txt` | 342 |
-
-The 376- and 9,109-record lists can be passed directly to modeling entry
-points that accept `--pos-ids` and `--neg-ids`. The other lists support group
-scoring and candidate auditing. They do not identify which benchmark proteins
-belonged to the historical training versus held-out subsets, and they do not
-record the negatives sampled in each ensemble round.
-
-For a new sequence acquisition, the helper below retrieves the current
-UniProtKB FASTA records and verifies the returned record count:
+Do not run this step merely to reproduce figures. Training is opt-in:
 
 ```bash
-python scripts/download_uniprot_fasta.py \
-  --ids data/model_inputs/significant_positive_ids.txt \
-  --output data/external/significant_positive.fasta
+mkdir -p outputs
+python pipeline/modeling/strict_runtime.py train \
+  --embedding-dir /trusted/path/saprot-650m-af2 \
+  --output-dir outputs/new_strict_reconstruction --device cuda --execute
 ```
 
-The response is not a frozen historical snapshot. Record the UniProt release,
-access date, and output checksum, or use a deposited sequence file with a
-verified checksum for archival reproduction. Existing FASTA files can be
-converted back to accession lists with `scripts/extract_fasta_ids.py`.
+The embedding root must contain exact `positive_mean/<accession>.pt` and
+`negative_mean/<accession>.pt` membership. Each trusted file supplies the
+`embeddings` tensor. The assembled 9,485 x 1,280 float32 matrix must match the
+frozen hash. No embeddings are downloaded or regenerated by this command.
 
-### Level 2: retrain from frozen embeddings and split manifests
+The scaler is fitted only on the 7,589 training proteins. Python, NumPy,
+PyTorch and CUDA RNGs are seeded once with 42, matching the recorded run;
+a new per-member reseeding scheme is not introduced. Each member is trained
+for 50 epochs with Adam (learning rate 0.001), binary cross-entropy with logits
+and batch size 64. The command replays frozen split/order/sampling records,
+saves new per-round states and a new ensemble, and reports differences from
+the frozen validation predictions. It refuses to run without `--execute`.
 
-This level is intended to start from fixed-length protein embeddings and exact
-train/held-out identifiers. Those large embeddings and historical split
-manifests are not established as present in the current Git release. Once
-deposited, this is the preferred route for testing downstream classification
-while avoiding repeated download and encoding of proteome-scale structures.
+The observed training environment was Python 3.12.12, NumPy 1.26.4,
+scikit-learn 1.8.0 and PyTorch 2.10.0+cu128 on an RTX 5880 (CUDA 12.8).
+`environment-training.yml` records these core versions but is not a complete
+OS/CUDA dependency lock. Hardware/library differences can change numerical
+outputs; byte-identical retraining is not promised. There is no automatic
+resume or reuse of an existing output directory.
 
-Required components for this level are:
-
-- a benchmark-membership table with 376 positives and 9,109 negatives;
-- explicit train and held-out ID manifests, rather than a newly sampled split;
-- mean-pooled embeddings for every representation being tested;
-- one configuration file that pins classifier hyperparameters, seeds,
-  resampling count, threshold, and output locations;
-- a checksum manifest for every embedding shard and split file.
-
-The original modeling scripts are grouped under `pipeline/modeling/`. Use
-`pipeline/ORIGIN_MANIFEST.tsv` to confirm provenance and whether a portability
-edit was made, then use each script's CLI/header to identify its exact inputs
-and outputs. The principal scripts cover general classifier training, the
-SaProt-650M-AF2 + MLP ensemble, the handcrafted random-forest baseline,
-cross-comparison, human and mouse inference, sampling stability, and alternative
-undersampling strategies.
-
-### Level 3: full structure-to-prediction reconstruction
-
-This level starts from sequence/structure identifiers and regenerates
-embeddings before retraining. It additionally requires the external data and
-model releases listed in `docs/data_sources.md`.
-
-The original encoding scripts are grouped under `pipeline/embeddings/` and
-cover ESM-C extraction, PST extraction, SaProt structural-token generation,
-SaProt extraction, and mouse structure download. Representative discovery
-commands are:
+## 4. Frozen downstream analyses
 
 ```bash
-python pipeline/embeddings/extract_esmc_embedding.py --help
-python pipeline/embeddings/extract_pst_embedding.py --help
-python pipeline/embeddings/generate_saprot_tokens.py --help
-python pipeline/embeddings/extract_saprot_embedding.py --help
-python pipeline/embeddings/download_mouse_pdb.py --help
+python -m pipeline.analysis.current_frozen_analysis \
+  --streme-dir data/frozen_analysis/streme401 \
+  --go-csv data/panels/current/SupplementaryFigure8_all_GO.csv
 ```
 
-If a script does not expose `--help`, inspect its header and the manifest's
-preservation note, then document any unresolved path dependencies. It should
-not be described as turnkey until those dependencies have been replaced with
-explicit arguments.
+This parses already completed STREME output and verifies frozen GO summaries;
+it launches neither STREME nor GO downloads. The STREME XML uses
+`test_evalue` and `npassing` (unique candidate proteins). There are 13 reported
+motifs, 7 with E<0.05 and 11 displayed at E<=1.2. Composition groups are
+Cys-containing, Lys/Arg-rich and Other sequences, not functional assignments.
 
-## Auditable command templates
+For explicitly supplied frozen GO annotations, the separate opt-in
+`pipeline/analysis/current_go_enrichment.py` can recompute one-sided Fisher
+tests. It requires direct annotation rows, all 401 candidate IDs, 5,640 scored
+untrained IDs and the 5,638 returned-ID universe, plus a snapshot identifier.
+The comparison background is 5,237 proteins; terms need >=5 members in the
+returned pool, and BH adjustment is within BP/CC/MF. It performs no ancestor
+propagation or live retrieval. The complete annotation input is not bundled,
+so figure replay is the supported offline path; see its `--help` before use.
 
-The commands below use the released CLI names. Text enclosed in angle brackets
-is a required local path or release identifier, not a literal argument. Resolve
-every placeholder against `docs/data_sources.md` and the frozen release
-manifest before running a full reconstruction. These templates expose the
-intended stage order; they do not make missing checkpoints or unpublished
-intermediate files available.
+## Database exports
 
-### Build structure-aware and sequence embeddings
-
-Generate SaProt structural tokens from a structure directory, then mean-pool
-the corresponding SaProt representations:
+The runtime schema contains 14 fields, excluding sequence. The original
+construction intermediate contains 15 fields including sequence. To join the
+frozen strict scores to an existing trusted runtime annotation snapshot:
 
 ```bash
-python pipeline/embeddings/generate_saprot_tokens.py \
-  --pdb-dir <pdb-directory> \
-  --output-fasta <saprot-structural-token-fasta> \
-  --foldseek <foldseek-binary> \
-  --plddt-threshold 70
-
-python pipeline/embeddings/extract_saprot_embedding.py \
-  --fasta-file <saprot-structural-token-fasta> \
-  --output-dir <saprot-mean-embedding-directory> \
-  --model-path <saprot-checkpoint> \
-  --pooling mean \
-  --device cuda
+python pipeline/database/update_runtime_scores.py \
+  --annotations-json /trusted/path/rlbp_annotations.json \
+  --human-predictions data/frozen_model/human_all_predictions.csv \
+  --mouse-predictions data/frozen_model/mouse_all_predictions.csv \
+  --output-dir outputs/new_database_snapshot
 ```
 
-The same pair of commands is run separately for the AF2-derived and
-PDB-derived SaProt inputs. The precise checkpoint revision, source structure
-release, and chain-selection rule remain release metadata that must be filled
-in; using the same model family name is not sufficient.
-
-Generate mean-pooled ESM-C embeddings for each frozen FASTA input:
-
-```bash
-python pipeline/embeddings/extract_esmc_embedding.py \
-  --fasta-file <input-fasta> \
-  --output-dir <esmc-300m-mean-embedding-directory> \
-  --model esmc_300m \
-  --pooling mean \
-  --device cuda
-
-python pipeline/embeddings/extract_esmc_embedding.py \
-  --fasta-file <input-fasta> \
-  --output-dir <esmc-600m-mean-embedding-directory> \
-  --model esmc_600m \
-  --pooling mean \
-  --device cuda
-```
-
-Generate PST embeddings from the frozen structure set:
-
-```bash
-python pipeline/embeddings/extract_pst_embedding.py \
-  --pdb-dir <pdb-directory> \
-  --output-dir <pst-mean-embedding-directory> \
-  --model-path <pst-checkpoint> \
-  --aggr mean \
-  --device cuda
-```
-
-Run this stage separately for PST-T33 and PST-T33-SO. Whether the historical
-run used `--include-seq`, and the exact mapping between that option and the two
-manuscript labels, must be confirmed from the archived run configuration before
-claiming an exact reconstruction.
-
-Mouse AlphaFold structures can be downloaded by the preserved helper when its
-input spreadsheet and remote service remain available:
-
-```bash
-python pipeline/embeddings/download_mouse_pdb.py \
-  --id-file <mouse-id-workbook> \
-  --output-dir <mouse-pdb-directory> \
-  --organism mouse
-```
-
-### Train the benchmark and principal ensemble
-
-The general benchmark script expects six specifically named subdirectories
-under one embedding root. Each must contain `positive_mean/` and
-`negative_mean/` directories. With no `--upstream` or `--classifiers` filter,
-the command runs all six representations against all ten classifiers:
-
-```bash
-RLBPPRED_EMBEDDINGS=<embedding-root> \
-python pipeline/modeling/train_classifier.py \
-  --n-rounds 300 \
-  --val-ratio 0.2 \
-  --seed 42 \
-  --device cuda \
-  --output-dir <classifier-comparison-output-directory>
-```
-
-The script creates its split internally and does not accept an explicit split
-manifest. Therefore, this command is a reconstruction of the curated script's
-current behavior, not yet a guaranteed replay of the exact historical held-out
-membership. Preserve and compare its validation IDs before interpreting metric
-differences.
-
-Train the principal SaProt-650M-AF2 + MLP ensemble from explicit accession
-lists and mean-pooled embeddings:
-
-```bash
-python pipeline/modeling/train_sa_mlp.py \
-  --pos-ids data/model_inputs/significant_positive_ids.txt \
-  --neg-ids data/model_inputs/negative_ids.txt \
-  --embedding-dir <saprot-af2-mean-embedding-directory> \
-  --n-rounds 300 \
-  --val-ratio 0.2 \
-  --seed 42 \
-  --device cuda \
-  --output-dir <principal-model-output-directory>
-```
-
-Expected files include `ensemble.pkl`, `results.json`,
-`val_predictions.csv`, and `roc_curve.svg`. The script likewise creates its
-validation split internally; an exact release should additionally publish the
-realized split and each round's sampled negative IDs.
-
-### Run controls and robustness analyses
-
-The handcrafted-feature baseline and the two cross-dataset controls use the
-following entry points:
-
-```bash
-python pipeline/modeling/train_rf_baseline.py \
-  --rf-features <handcrafted-feature-workbook> \
-  --pos-ids <rf-positive-id-list> \
-  --neg-ids <rf-negative-id-list> \
-  --val-ratio 0.2 \
-  --seed 42 \
-  --output-dir <rf-baseline-output-directory>
-
-python pipeline/modeling/train_cross_comparison.py \
-  --experiment rf_features_our_data \
-  --pos-ids <filtered-positive-id-list> \
-  --neg-ids <filtered-negative-id-list> \
-  --rf-features <handcrafted-feature-workbook> \
-  --n-rounds 300 \
-  --val-ratio 0.2 \
-  --seed 42 \
-  --device cuda \
-  --output-dir <rf-features-our-data-output-directory>
-
-python pipeline/modeling/train_cross_comparison.py \
-  --experiment saprot_rf_data \
-  --pos-ids <rf-positive-id-list> \
-  --neg-ids <rf-negative-id-list> \
-  --embedding-dir <saprot-af2-mean-embedding-directory> \
-  --n-rounds 300 \
-  --val-ratio 0.2 \
-  --seed 42 \
-  --device cuda \
-  --output-dir <saprot-rf-data-output-directory>
-```
-
-Run the sampling-ratio, convergence, and undersampling comparisons with the
-manuscript settings stated explicitly. The undersampling script defaults to
-100 rounds, so `--rounds 300` is required for the reported comparison:
-
-```bash
-python pipeline/modeling/run_sampling_stability.py \
-  --pos-ids data/model_inputs/significant_positive_ids.txt \
-  --neg-ids data/model_inputs/negative_ids.txt \
-  --embedding-dir <saprot-af2-mean-embedding-directory> \
-  --ratios 1 2 4 \
-  --round-checkpoints 50 100 200 300 \
-  --ratio-rounds 300 \
-  --val-ratio 0.2 \
-  --seed 42 \
-  --device cuda \
-  --output-dir <sampling-stability-output-directory>
-
-python pipeline/modeling/run_undersampling_strategy_comparison.py \
-  --pos-ids data/model_inputs/significant_positive_ids.txt \
-  --neg-ids data/model_inputs/negative_ids.txt \
-  --embedding-dir <saprot-af2-mean-embedding-directory> \
-  --rounds 300 \
-  --val-ratio 0.2 \
-  --seed 42 \
-  --device cuda \
-  --output-dir <undersampling-output-directory>
-```
-
-### Score human and mouse datasets
-
-For the four human groups and three mouse groups, provide directories of ID
-lists matching the filenames expected by the two preserved scripts:
-
-| Human inference filename | Released source list |
-|---|---|
-| `sig_pos_ids.txt` | `data/model_inputs/significant_positive_ids.txt` |
-| `neg_ids.txt` | `data/model_inputs/negative_ids.txt` |
-| `potential_positive.txt` | `data/model_inputs/potential_positive_ids.txt` |
-| `untrained_proteome.txt` | `data/model_inputs/untrained_proteome_ids.txt` |
-
-Create a staging directory with those four filenames, preserving the released
-file contents. The current Git release does not provide corresponding mouse ID
-lists under the filenames expected by `inference_mouse_datasets.py`; obtain and
-version those inputs before running the mouse command.
-
-```bash
-python pipeline/modeling/inference_four_datasets.py \
-  --checkpoint <principal-model-output-directory>/ensemble.pkl \
-  --embedding-dir <human-saprot-af2-embedding-root> \
-  --id-dir <human-four-dataset-id-directory> \
-  --output-dir <human-inference-output-directory> \
-  --device cpu
-
-python pipeline/modeling/inference_mouse_datasets.py \
-  --checkpoint <principal-model-output-directory>/ensemble.pkl \
-  --embedding-dir <mouse-saprot-af2-mean-embedding-directory> \
-  --id-dir <mouse-three-dataset-id-directory> \
-  --output-dir <mouse-inference-output-directory> \
-  --device cpu
-```
-
-For a standalone structure or embedding directory, use
-`pipeline/modeling/inference.py`. Set `--threshold 0.5` for the reported held-out
-classification rule or `--threshold 0.85` for the human discovery rule; always
-retain the continuous probability column.
-
-### Build database exports
-
-After freezing the human and mouse prediction tables and annotation workbooks,
-build the intermediate proteome tables and then the runtime exports:
-
-```bash
-python pipeline/database/build_proteome_annotation_csv.py \
-  --human-xlsx <human-annotation-workbook> \
-  --mouse-xlsx <mouse-annotation-workbook> \
-  --human-predictions <human-prediction-table> \
-  --mouse-predictions <mouse-prediction-table> \
-  --output-dir <database-intermediate-directory>
-
-python pipeline/database/build_annotation_db.py \
-  --input <database-intermediate-directory>/all_proteome_annotations_for_db.csv \
-  --json-out <database-output-directory>/rlbp_annotations.json \
-  --csv-out <database-output-directory>/rlbp_annotations.csv
-```
-
-The first command writes 15 columns including `sequence`; the current runtime
-builder writes 14 fields and drops `sequence`. Treat this as a known schema
-discrepancy until the implementation or manuscript description is reconciled.
-
-## Reference workflow
-
-### 1. Freeze the input universe
-
-The manuscript benchmark comprises 376 high-confidence RLBPs and 9,109
-high-confidence non-RLBPs. The positive labels derive from recurrent evidence
-across five published human R-loop proteomics studies. The negative set derives
-from the reviewed human proteome after excluding positives and proteins linked
-to selected GO terms, enriched domains, R-loopBase regulators, and validation
-sets, followed by redundancy, length, and structure-availability filtering.
-
-For a reproducible release, the following files are authoritative:
-
-1. the final positive and negative UniProt accession lists;
-2. a per-protein provenance/filter table;
-3. the exact train and held-out split manifests;
-4. the identifiers reserved as potential positives and untrained-proteome
-   candidates;
-5. database release/version metadata and checksums.
-
-Do not regenerate the held-out split by enumerating a directory. Several legacy
-scripts call `os.listdir()` and convert lists through Python sets, which can
-change ordering. Use the released split manifests exactly.
-
-### 2. Generate protein representations
-
-Six frozen upstream representations were compared:
-
-| Representation | Type | Manuscript output dimension | Required external component |
-|---|---|---:|---|
-| ESMC-300M | Sequence-only | 960 | Exact model identifier and revision: **TO BE CONFIRMED** |
-| ESMC-600M | Sequence-only | 1,152 | Exact model identifier and revision: **TO BE CONFIRMED** |
-| PST-T33 | Structure-integrated | **TO BE CONFIRMED** | PST code/checkpoint revision and structural graph inputs |
-| PST-T33-SO | Structure-integrated | **TO BE CONFIRMED** | PST code/checkpoint revision and structural graph inputs |
-| SaProt-650M-AF2 | Structure-aware | 1,280 | SaProt checkpoint, Foldseek build, and AlphaFold structures |
-| SaProt-650M-PDB | Structure-aware | 1,280 | SaProt checkpoint, Foldseek build, and experimental/PDB-derived structural inputs |
-
-Residue-level hidden states are reduced by global mean pooling. A release must
-state how sequences exceeding the model context length were handled, whether
-special tokens were excluded from pooling, how missing residues/chains were
-treated, and how proteins without valid structures were removed. These details
-cannot be inferred reliably from a final embedding file.
-
-### 3. Benchmark all representation-classifier combinations
-
-Each of the six representations was paired with ten classifiers:
-
-1. logistic regression;
-2. support vector machine;
-3. random forest;
-4. XGBoost;
-5. LightGBM;
-6. k-nearest neighbors;
-7. Gaussian naive Bayes;
-8. multilayer perceptron;
-9. recurrent neural network;
-10. long short-term memory network.
-
-This produces 60 benchmark combinations. Evaluate every combination on the
-same released held-out set and report AUROC, AUPRC, F1, precision, recall,
-Matthews correlation coefficient, and accuracy. The expected ranking result is
-that SaProt-650M-AF2 + MLP is the strongest ranking model, with AUROC 0.9925 and
-AUPRC 0.9264 in the manuscript release. SaProt-650M-AF2 + SVM is the preferred
-fixed-threshold model in the manuscript, with F1 0.6364, precision 0.4828,
-recall 0.9333, MCC 0.6543, and accuracy 0.9578 at the reported threshold.
-
-### 4. Train the principal balanced ensemble
-
-The manuscript's principal model is SaProt-650M-AF2 + MLP. In each of 300
-ensemble rounds:
-
-1. retain all training positives;
-2. sample an equal number of training negatives without replacement within the
-   round;
-3. train one downstream MLP on that 1:1 subset;
-4. save its checkpoint and the sampled negative IDs;
-5. predict each evaluation protein with every ensemble member;
-6. average the 300 probabilities to obtain the soft-voting score.
-
-The release should preserve the sampled negative-ID list for every round. A
-single global seed is insufficient if library versions, directory order, or
-parallel workers change. The model configuration must also pin the MLP
-architecture, optimizer, learning rate, weight decay, epoch/early-stopping
-rule, batch size, probability calibration behavior, and checkpoint-selection
-criterion.
-
-### 5. Run robustness analyses
-
-The original scripts for these analyses are under `pipeline/modeling/` and are
-identified in `ORIGIN_MANIFEST.tsv`.
-
-- Sampling ratios: positive:negative ratios 1:1, 1:2, and 1:4 at 300 rounds.
-- Ensemble convergence: cumulative predictions after 50, 100, 200, and 300
-  rounds with the 1:1 ratio.
-- Negative selection: random, K-means representative, and K-means hard-negative
-  undersampling.
-- Dataset construction control: retrain on the unfiltered 2,220-positive,
-  14,749-negative dataset.
-- Prior-feature baseline: random forest on 30 handcrafted descriptors using 354
-  positives and 16,575 negatives with complete features.
-
-The expected manuscript ranges are AUROC ≥ 0.992 and AUPRC
-0.9276–0.9364 across the sampling-ratio comparison, and AUROC 0.992–0.993,
-AUPRC 0.921–0.926, and MCC 0.611–0.623 across undersampling strategies.
-
-### 6. Calibrate thresholds and score proteomes
-
-At threshold 0.5, the held-out result reported in the manuscript contains 75
-positives and 1,821 negatives, of which 71 positives are recovered and 92
-negatives pass the threshold. For proteome-scale discovery, use the held-out
-negative pass rate as an empirical false-positive rate rather than retaining
-the 0.5 classification threshold.
-
-The principal discovery threshold is 0.85. It corresponds to a 1.15% held-out
-negative pass rate and yields 342 candidates from the untrained human proteome.
-The separately calculated 1%-FPR threshold is 0.8583. Preserve continuous
-scores in all exports; do not retain only binary labels.
-
-The trained human ensemble is then applied without retraining to:
-
-- human significant positives, potential positives, untrained reviewed
-  proteins, and negatives;
-- mouse significant positives, potential positives, and negatives using mouse
-  UniProt sequences and AlphaFold structures encoded with the same
-  SaProt-650M-AF2 pipeline.
-
-The mouse predictions are a zero-shot transfer analysis. The manuscript notes
-that the mouse negative-set score distribution differs from the human one, so
-the human 0.85 discovery threshold must not be represented as a calibrated
-mouse threshold.
-
-### 7. Run downstream analyses and database construction
-
-Original downstream scripts are grouped under `pipeline/analysis/`. They cover
-GO/domain enrichment, EpiFactors, LLPS database overlap,
-MobiDB-lite disorder, STREME motifs, and amino-acid composition. These analyses
-consume the frozen 342-candidate list, 376 known RLBPs, the relevant non-RLBP or
-untrained-proteome background, and versioned external annotations.
-
-Database construction scripts are under `pipeline/database/`. The final release
-should produce separate human and mouse CSV files plus a combined table using a
-15-field intermediate schema. The currently inventoried runtime builder retains
-only 14 fields and omits `sequence`; this must be reconciled before describing
-the deployed runtime schema as 15 fields. Validation targets are 20,075 human records, 17,002 mouse
-records, and 37,077 combined records. A query for reviewed human TOP1 at minimum
-confidence 0.85 should return UniProt P11387 with score 0.999743.
-
-## Compute and storage requirements
-
-No complete wall-time, peak-memory, GPU-memory, or storage benchmark has been
-verified for the full manuscript workflow. Therefore this release must not
-invent a tested hardware specification.
-
-The practical expectations are:
-
-- figure-only reproduction from `data/panels/` is CPU-suitable;
-- classical classifiers and downstream enrichment can generally run on CPU,
-  although 300 repeated fits can be time-consuming;
-- proteome-scale ESM-C, PST, and SaProt extraction is the GPU- and
-  storage-intensive stage;
-- pretrained weights, AlphaFold structures, embeddings, 300 checkpoints, and
-  proteome-wide predictions may exceed normal Git repository limits.
-
-Before the archived release is declared fully reproducible, record the tested
-operating system, CPU, RAM, GPU model/count, GPU memory, CUDA/driver versions,
-wall time, peak memory, and disk use for Levels 1–3. Large licensed assets should
-be deposited in an appropriate data/model repository and fetched with verified
-checksums rather than committed to Git.
-
-## Randomness and numerical reproducibility
-
-The following stages are stochastic or order-sensitive:
-
-- train/held-out splitting if regenerated instead of using the release
-  manifest;
-- negative sampling in each ensemble round;
-- neural-network initialization, batch ordering, and dropout;
-- some CUDA kernels;
-- UMAP initialization and neighbor construction;
-- K-means initialization;
-- filesystem enumeration in legacy scripts.
-
-For a deterministic rerun, pin Python, NumPy, PyTorch, scikit-learn, UMAP,
-XGBoost, LightGBM, CUDA, and cuDNN versions; seed Python, NumPy, PyTorch, UMAP,
-and K-means; sort every input list; preserve the exact split and per-round
-sampling manifests; and record deterministic PyTorch settings. If a kernel
-cannot be deterministic, document it and compare predictions and metrics with
-an approved tolerance rather than requiring byte-identical checkpoints.
-
-Panel regeneration from the frozen released CSV files should be exact in data
-content. Full retraining is not expected to be byte-identical across hardware
-unless the above conditions are demonstrated. The reported metric values are
-reference checkpoints, not confidence intervals for stochastic reruns.
-
-## Completion criteria
-
-A full reconstruction is complete only when it produces:
-
-- the 376/9,109 benchmark and exact released split membership;
-- all 60 benchmark rows with the seven reported metrics;
-- the 300-member SaProt-650M-AF2 + MLP ensemble or an explicitly documented
-  equivalent reconstruction;
-- frozen human and mouse probability tables;
-- the 342-candidate table at threshold 0.85;
-- the downstream enrichment tables;
-- the three RLBPPredDB export files and schema;
-- panel data accepted by `scripts/reproduce_figures.py`;
-- a passing `python scripts/validate_release.py --root .` report.
-
-Known gaps that currently prevent a claim of complete raw-to-figure
-reproducibility are listed in `docs/known_limitations.md`.
+The output directory must be new or empty. Only `confidence` changes; annotation
+fields and record order are preserved. The command produces JSON, CSV and a
+build manifest. It rejects duplicate prediction IDs, invalid scores, unmatched
+prediction IDs and unexpected runtime fields. Missing strict scores become JSON
+null/CSV blank, never zero or a retained historical score. CSV/JSON preserve full
+precision; six-decimal formatting belongs only in the browser UI.
+
+Expected current coverage is 37,077 records: human 20,075 (16,969 scored and
+3,106 unscored), mouse 17,002 (all scored). The 401 discovery candidates are not
+the same as all database proteins above 0.98. The Figure 6 query returns six
+reviewed human "DNA topoisomerase" matches sorted by descending score; only
+TOP3B belongs to the 401 discovery set.
+
+This operation does not overwrite or deploy the separate RLBPPredDB website.
+Live annotation construction remains dependent on exact external snapshots.

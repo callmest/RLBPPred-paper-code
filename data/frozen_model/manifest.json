@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "profile": "strict401-manuscript-v12",
+  "publication_status": "local working profile; not a published GitHub release",
+  "run_id": "strict_saprot_mlp_reproduction_20261013",
+  "training_environment": {
+    "python": "3.12.12",
+    "torch": "2.10.0+cu128",
+    "numpy": "1.26.4",
+    "scikit_learn": "1.8.0",
+    "gpu": "NVIDIA RTX 5880 Ada Generation",
+    "cuda": "12.8"
+  },
+  "protocol": {
+    "seed": 42,
+    "rounds": 300,
+    "input_dim": 1280,
+    "hidden_dims": [
+      512,
+      256
+    ],
+    "dropout": 0.3,
+    "batch_norm": true,
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "epochs": 50,
+    "batch_size": 64,
+    "positive_to_negative_sampling_ratio": "1:1",
+    "scaler_fit": "all strict training proteins only",
+    "rng": "seed Python/NumPy/PyTorch/CUDA once at start; no per-round reseeding",
+    "training_input_order": "sorted positive IDs then sorted negative IDs",
+    "split": "explicit frozen strict_input_manifest; validation order in val_predictions",
+    "sampling": "explicit frozen 300-round negative_ids and training_order",
+    "classification_threshold": 0.5,
+    "classification_operator": ">="
+  },
+  "counts": {
+    "strict_positive": 376,
+    "strict_negative": 9109,
+    "training_positive": 301,
+    "training_negative": 7288,
+    "validation_positive": 75,
+    "validation_negative": 1821,
+    "human_scored": 16969,
+    "mouse_scored": 17002,
+    "potential_positive_input": 1879,
+    "potential_positive_scored": 1844,
+    "untrained_input": 5649,
+    "untrained_scored": 5640,
+    "candidates": 401
+  },
+  "screening": {
+    "threshold": 0.98,
+    "operator": ">=",
+    "pool": "human untrained_proteome only",
+    "target_empirical_fpr": 0.001,
+    "false_positives": 1,
+    "heldout_negative_n": 1821,
+    "empirical_fpr": 0.0005491488193300384,
+    "candidate_count": 401,
+    "candidate_probability_column": "probability from frozen 5880 human_all_predictions; probability_L40S preserved for cross-machine comparison"
+  },
+  "checkpoint": {
+    "filename": "strict_ensemble.pt",
+    "format": "state_dict_ensemble_v1",
+    "sha256": "72875c9414f9f3705b9437ce2c2b088257810b737464ab2fb332a0df7406aa41",
+    "included": false,
+    "availability": "Not bundled; obtain the trusted frozen checkpoint separately. No public download URL or release DOI is asserted."
+  },
+  "cross_machine_probability_tolerance": 1e-06,
+  "candidate_reference": {
+    "run_id": "strict_candidate_figure5_threshold098_20261026",
+    "filename": "candidates_401_ge_0.98.csv",
+    "sha256": "ffb2e3faad39de5c99fc7cf0c731c157e3d8fa28c8f9513847bc7a52bc6b6284",
+    "ids_equal": true,
+    "max_probability_difference": 5.563100202721216e-09
+  },
+  "provenance_note": "input_validation.json is a byte-preserved historical run record. In public provenance.json, only source and output absolute paths were replaced with logical relative labels; original/distributed hashes and a canonical hash of all unchanged fields are recorded below. Original bytes are retained in the private audit archive outside Git. The candidate_threshold 0.85 describes the initial audit of that run, not the current screening policy; screening above is authoritative for this profile. No model was retrained for this release preparation.",
+  "artifacts": {
+    "candidates_401.csv": {
+      "sha256": "ef2a74e71a1069fb0f1b4d70d44873c62f95b011451278647f179b2f00ee95f3",
+      "bytes": 28549
+    },
+    "human_all_predictions.csv": {
+      "sha256": "b64abe9d101049c3c913e359b4f8c82878b19835ddb4a0cbc8a5b2b4efe1ed4a",
+      "bytes": 704758
+    },
+    "input_validation.json": {
+      "sha256": "3fb22576452a773ee077ef2809a31444e399abd942ff0c784291daa3fcabb87f",
+      "bytes": 286
+    },
+    "mouse_all_predictions.csv": {
+      "sha256": "b946a9ca1acc8710aa62bb75e4243875bd5ad1143d0c17d773cf9dd9e87dad6d",
+      "bytes": 643259
+    },
+    "provenance.json": {
+      "sha256": "78598af7d0443c50613b2f3b15b143574ff7e79096e87e41328a675fb30b7cef",
+      "bytes": 1446,
+      "original_sha256": "7e3b8d1e38c6384dc1d6a36b6a7048492591711e899efaebe9bb3fe71ea0f51f",
+      "original_bytes": 1480,
+      "sanitization": {
+        "changed_fields": ["source", "output"],
+        "transformation": "Replace only the original absolute source and output paths with logical relative labels; all other JSON fields are unchanged.",
+        "preserved_fields_canonical_sha256": "6e21675314c90b644925b530c8761a008cb21b52e74e155dff71b1afcae3eda8",
+        "canonicalization": "UTF-8 JSON excluding source and output, sorted keys, separators comma/colon, ensure_ascii false"
+      }
+    },
+    "sampling_manifest.json": {
+      "sha256": "58aa07b2a4bdf062f54293bd5d63fe42f7ad8c759898d6fd7fd33c68c0625c95",
+      "bytes": 4370006
+    },
+    "strict_input_manifest.csv": {
+      "sha256": "06bb3088781d196e722e54be6d782eba59cc390d32ef1c0ef5166ceb4b80b06b",
+      "bytes": 161828
+    },
+    "val_predictions.csv": {
+      "sha256": "92275671cad652864625b5f7f7e3599237eec081bf410f62e98442addcb0e8e9",
+      "bytes": 59270
+    },
+    "validation_metrics.json": {
+      "sha256": "c8c947606c131ada7c0f5142bb63a46cfe0570fe09feb2c61c131ac5f135e040",
+      "bytes": 304
+    }
+  }
+}

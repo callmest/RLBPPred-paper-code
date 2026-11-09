@@ -4,20 +4,21 @@ PYTHON ?= python3
 CONDA ?= conda
 CFFCONVERT ?= cffconvert
 FIGURE ?= all
-DATA_DIR ?= data/panels
-OUTPUT_DIR ?= outputs/figures
+DATA_DIR ?= data/panels/current
+OUTPUT_DIR ?= outputs/figures/current
 
 .PHONY: help install-figures create-training-env update-training-env \
 	reproduce-figures validate-release validate validate-metadata \
-	validate-python validate-files audit-paths
+	validate-python validate-files audit-paths test
 
 help:
 	@echo "Available targets:"
 	@echo "  install-figures      Install dependencies used by analyses and figures"
 	@echo "  create-training-env  Create the downstream-training environment"
 	@echo "  update-training-env  Update an existing Conda environment"
-	@echo "  reproduce-figures    Rebuild all panels, or one panel with FIGURE=Fig3e"
-	@echo "  validate-release     Check released panel data and manuscript invariants"
+	@echo "  reproduce-figures    Replay current quantitative panels; e.g. FIGURE=Fig5d"
+	@echo "  validate-release     Check frozen strict401 data and scientific invariants"
+	@echo "  test                 Run offline unit tests; no training or live retrieval"
 	@echo "  validate             Validate metadata, Python syntax, and file sizes"
 	@echo "  audit-paths          Report machine-specific absolute paths in code"
 
@@ -39,6 +40,9 @@ validate-release:
 	@test -f scripts/validate_release.py || { echo "Missing scripts/validate_release.py"; exit 2; }
 	$(PYTHON) scripts/validate_release.py --root .
 
+test:
+	$(PYTHON) -m unittest discover -s tests -v
+
 validate-metadata:
 	$(PYTHON) -c 'import importlib.util, pathlib; tomllib=__import__("tomllib" if importlib.util.find_spec("tomllib") else "tomli"); tomllib.loads(pathlib.Path("pyproject.toml").read_text())'
 	$(PYTHON) -c 'import pathlib, yaml; [yaml.safe_load(pathlib.Path(p).read_text()) for p in ("environment-training.yml", ".github/workflows/validate.yml")]'
@@ -47,8 +51,7 @@ validate-metadata:
 	$(CFFCONVERT) --validate
 
 validate-python:
-	@dirs=""; for d in scripts pipeline; do [[ -d "$$d" ]] && dirs="$$dirs $$d"; done; \
-	if [[ -n "$$dirs" ]]; then $(PYTHON) -m compileall -q $$dirs; fi
+	$(PYTHON) -c 'import ast; from pathlib import Path; files=[p for d in ("scripts", "pipeline", "tests") for p in Path(d).rglob("*.py")]; [ast.parse(p.read_text(), filename=str(p)) for p in files]; print("Parsed", len(files), "Python files without executing them")'
 
 validate-files:
 	@bad="$$(find . -path ./.git -prune -o -type f -size +95M -print)"; \
@@ -61,7 +64,7 @@ validate-files:
 audit-paths:
 	@dirs=""; for d in scripts pipeline; do [[ -d "$$d" ]] && dirs="$$dirs $$d"; done; \
 	if [[ -n "$$dirs" ]]; then \
-		grep -RInE '(/home/[^/]+/|/Users/[^/]+/)' $$dirs --include='*.py' --include='*.sh' || true; \
+		rg -n '(/home/[^/]+/|/Users/[^/]+/)' $$dirs -g '*.py' -g '*.sh' || true; \
 	fi
 
 validate: validate-metadata validate-python validate-files

@@ -2,28 +2,35 @@
 """
 Experiment 1.Xb: De novo motif discovery on full-length protein sequences.
 
-Novel Predicted RLBPs (n=342) vs Non-RLBPs (n=9,109) using STREME.
-Unlike Exp 1.2b which used IDR subsequences, this uses complete protein sequences.
+Parameterized, explicitly opt-in upstream STREME execution.
+Default invocation only parses the packaged current frozen output; it never
+starts a new analysis. Historical 342-candidate inputs are not defaults.
 """
 
 import os
+import argparse
 import subprocess
 from pathlib import Path
+try:
+    from .current_frozen_analysis import parse_streme_text, parse_streme_xml, motif_summary
+except ImportError:
+    from current_frozen_analysis import parse_streme_text, parse_streme_xml, motif_summary
 
 BASE = Path(os.environ.get("RLBPPRED_ROOT", Path(__file__).resolve().parents[2]))
 DATA_DIR = BASE / "data" / "idr_analysis"
 OUT_DIR = BASE / "results" / "idr_analysis" / "motif_discovery_fullseq"
-OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 STREME_BIN = os.environ.get("STREME_BIN", "streme")
 
-NOVEL_FASTA = DATA_DIR / "candidates_342.fasta"
+NOVEL_FASTA = DATA_DIR / "candidates_401.fasta"
 NEGATIVE_FASTA = DATA_DIR / "negative_9109.fasta"
 
 
 def run_streme(primary_fasta, control_fasta, output_dir):
     """Run STREME for de novo motif discovery."""
-    output_dir.mkdir(parents=True, exist_ok=True)
+    if output_dir.exists():
+        raise FileExistsError(f"Refusing to overwrite {output_dir}")
+    output_dir.parent.mkdir(parents=True, exist_ok=True)
     cmd = [
         STREME_BIN,
         "--p", str(primary_fasta),
@@ -32,7 +39,8 @@ def run_streme(primary_fasta, control_fasta, output_dir):
         "--minw", "3",
         "--maxw", "15",
         "--thresh", "0.05",
-        "--oc", str(output_dir),
+        "--seed", "0", "--hofract", "0.1",
+        "--o", str(output_dir),
     ]
     print(f"Running STREME: Novel full-length vs Negative full-length")
     print(f"  Primary: {primary_fasta} ")
@@ -50,71 +58,39 @@ def run_streme(primary_fasta, control_fasta, output_dir):
 
 
 def parse_streme_results(streme_dir):
-    """Parse STREME text output for motif summary."""
+    """Parse XML when present; robust whitespace-aware text fallback."""
+    xml_path = Path(streme_dir) / "streme.xml"
+    if xml_path.exists():
+        return parse_streme_xml(xml_path)
     txt_path = streme_dir / "streme.txt"
     if not txt_path.exists():
         print(f"  No streme.txt found in {streme_dir}")
         return []
 
-    motifs = []
-    with open(txt_path) as f:
-        in_motif = False
-        current = {}
-        for line in f:
-            line = line.strip()
-            if line.startswith("MOTIF"):
-                if current:
-                    motifs.append(current)
-                parts = line.split()
-                current = {
-                    "id": parts[1] if len(parts) > 1 else "",
-                    "consensus": parts[2] if len(parts) > 2 else parts[1],
-                }
-                in_motif = True
-            elif in_motif and line.startswith("letter-probability matrix"):
-                # Parse width and nsites
-                for token in line.split():
-                    if token.startswith("w="):
-                        current["width"] = int(token.split("=")[1])
-                    elif token.startswith("nsites="):
-                        current["nsites"] = int(token.split("=")[1])
-                    elif token.startswith("E="):
-                        current["evalue"] = float(token.split("=")[1])
-
-        if current:
-            motifs.append(current)
-
-    print(f"\n  Found {len(motifs)} significant motifs:")
-    for m in motifs:
-        print(f"    {m.get('id','?'):12s}  w={m.get('width','?')}  "
-              f"nsites={m.get('nsites','?')}  E={m.get('evalue','?')}")
-
-    return motifs
+    return parse_streme_text(txt_path)
 
 
 def main():
-    print("=" * 60)
-    print("Experiment: Full-length motif discovery")
-    print("  Novel Predicted RLBPs vs Non-RLBPs")
-    print("=" * 60)
-
-    # Verify input files
-    for f in [NOVEL_FASTA, NEGATIVE_FASTA]:
-        if not f.exists():
-            print(f"ERROR: {f} not found")
-            return
-        n = sum(1 for line in open(f) if line.startswith(">"))
-        print(f"  {f.name}: {n} sequences")
-
-    print()
-    streme_out = OUT_DIR / "novel_vs_negative"
-    result_dir = run_streme(NOVEL_FASTA, NEGATIVE_FASTA, streme_out)
-
-    if result_dir:
-        motifs = parse_streme_results(result_dir)
-        print(f"\nResults saved to: {result_dir}")
-        print(f"  HTML report: {result_dir / 'streme.html'}")
-        print(f"  Text output: {result_dir / 'streme.txt'}")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--parse-dir", type=Path, default=BASE / "data/frozen_analysis/streme401")
+    parser.add_argument("--run-streme", action="store_true", help="Explicitly launch a new upstream analysis; not needed for figure replay.")
+    parser.add_argument("--primary", type=Path)
+    parser.add_argument("--control", type=Path)
+    parser.add_argument("--output-dir", type=Path)
+    args = parser.parse_args()
+    if args.run_streme:
+        if not all([args.primary, args.control, args.output_dir]):
+            parser.error("--run-streme requires --primary, --control, and a new --output-dir")
+        for path, expected in [(args.primary, 401), (args.control, 9109)]:
+            count = sum(line.startswith(">") for line in path.open())
+            if count != expected:
+                parser.error(f"{path.name}: expected {expected} sequences, found {count}")
+        result_dir = run_streme(args.primary, args.control, args.output_dir)
+        if result_dir is None:
+            raise SystemExit(1)
+    else:
+        result_dir = args.parse_dir
+    print(motif_summary(parse_streme_results(result_dir)))
 
 
 if __name__ == "__main__":

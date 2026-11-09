@@ -10,10 +10,10 @@
   {
     "panel_data": "Figure2b",
     "source_workbook": "sourcedata_v3.xlsx",
-    "source_sheet": "Figure2b",
-    "description": "Source data for Figure 2b. AUPRC heatmap values",
+    "source_sheet": "Figure2d",
+    "description": "Source data for current Figure 2c. AUPRC values for 60 representation-classifier combinations. SaProt-650M-AF2 + MLP uses the strictly filtered reproduction run from 2026-10-13; the other 59 combinations are unchanged.",
     "rows": 10,
-    "sha256": "0d84e049a0ff1a1cf5bbdfffd870376da65ecbfcda72ae552784c0702ed3873b"
+    "sha256": "df69d9d2fe6f4ea806a1f0e7240332d66c5a8c74859dd3fa84a7554f60dedc20"
   },
   {
     "panel_data": "Figure3a",

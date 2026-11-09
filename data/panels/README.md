@@ -1,20 +1,22 @@
-# Panel-level source data
+# Panel data: current and historical profiles
 
-The CSV files in this directory are the canonical inputs for the fast figure
-reproduction route. Their names follow the **final manuscript numbering**.
-`manifest.json` records each file's source sheet, description, row count, and
-SHA-256 checksum.
+Use **current/** for manuscript v12 and all default reproduction commands.
 
-Two release corrections are deliberate:
+- `current/manifest.json` records exact source workbook ranges, schema, row
+  counts and hashes. The explicit mapping is `../../configs/panel_map.json`.
+- Current screening is >=0.98, empirical held-out FPR 1/1,821 (0.0549%) and
+  401 candidates from 5,640 scored untrained human proteins.
+- Current classification summaries use >=0.5, a separate decision threshold.
+- Current plots cover six main/eight supplementary figure groups; manual or
+  experimental panels are documented but not fabricated by the replay command.
+- The source workbook index and historical domain-enrichment sheet are not
+  current panel datasets.
 
-1. `Figure1b.csv` is the cleaned five-study membership matrix used for the
-   final UpSet panel: 1,430 unique identifiers; study sizes 462, 364, 308, 434,
-   and 430; 407 proteins recurring in at least two studies; and four recurring
-   in all five. It supersedes an earlier alias-unresolved 1,468-row sheet.
-2. `Figure3a.csv` labels the AUROC 0.9925 curve as the **filtered benchmark**
-   and the AUROC 0.9001 curve as the **unfiltered dataset**, matching the final
-   PDF. Some historical folders used inverted labels.
+The top-level CSVs and top-level manifest are **historical**. They have been
+preserved, including the pre-existing corrected Figure2b metric, and are no
+longer advertised as the canonical current figure inputs. Do not overwrite
+them with a mixed export or combine them with current files. Historical
+numbering (including Figure3e and SuppFigure1c) is not current numbering.
 
-The files reconstruct plotted values; they do not by themselves replace the
-external raw datasets or the full model-training assets. See
-[`../../docs/known_limitations.md`](../../docs/known_limitations.md).
+See [figure mapping and export instructions](../../docs/reproduce_figures.md)
+and [remaining limitations](../../docs/known_limitations.md).

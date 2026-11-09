@@ -1,5 +1,8 @@
-release: "1.0.0"
+profile: "strict401-manuscript-v12"
+publication_status: "local working profile; no published release/tag/DOI asserted"
 random_seed: 42
+frozen_model_manifest: "data/frozen_model/manifest.json"
+current_model_cli: "pipeline/modeling/strict_runtime.py"
 
 benchmark:
   recurrent_positive_candidates: 407
@@ -15,21 +18,44 @@ ensemble:
   positive_to_negative_sampling_ratio: "1:1"
   validation_fraction: 0.20
   pooling: "global mean"
+  train_positive: 301
+  train_negative: 7288
+  validation_positive: 75
+  validation_negative: 1821
+  classification_threshold: 0.5
+  classification_operator: ">="
 
 reported_performance:
-  auroc: 0.9925
-  auprc: 0.9264
+  auroc: 0.9926487278052353
+  auprc: 0.9273565842784495
 
 screening:
-  adopted_threshold: 0.85
-  high_confidence_candidates: 342
-  one_percent_fpr_threshold: 0.8583
+  adopted_threshold: 0.98
+  operator: ">="
+  high_confidence_candidates: 401
+  discovery_pool: "scored human untrained_proteome only"
+  discovery_pool_scored: 5640
+  target_empirical_fpr: 0.001
+  false_positives: 1
+  heldout_negative_n: 1821
+  realized_empirical_fpr: 0.0005491488193300384
+  fpr_units: "fraction, not percentage"
 
 database:
   human_records: 20075
   mouse_records: 17002
   total_records: 37077
+  scored_records: 33971
+  missing_score_records: 3106
+  runtime_fields: 14
   representative_query:
-    gene: "TOP1"
-    uniprot_accession: "P11387"
-    confidence: 0.999743
+    keyword: "DNA topoisomerase"
+    species: "Human"
+    reviewed_status: "reviewed"
+    minimum_prediction_score: 0.98
+    operator: ">="
+    sort: "confidence_desc"
+    matched_records: 6
+    example_gene: "TOP1"
+    example_uniprot_accession: "P11387"
+    example_prediction_score: 0.9999898352225621

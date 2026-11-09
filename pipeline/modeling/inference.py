@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-RLBP Inference: predict RNA-ligand binding probability from PDB structures.
+Legacy pickle-ensemble inference: predict R-loop-binding-protein scores.
+
+For the current strict state_dict_ensemble_v1 checkpoint use
+strict_runtime.py predict with frozen-protocol mean-pooled embeddings.
 
 Supports two input modes:
   1. End-to-end:    --pdb-dir → extract embeddings → ensemble predict
@@ -297,6 +300,7 @@ SAPROT_MODELS = {"saprot-650m-af2", "saprot-650m-pdb"}
 
 
 def main():
+    warnings.warn("Legacy pickle inference. Use strict_runtime.py predict for the current strict checkpoint.", RuntimeWarning)
     parser = argparse.ArgumentParser(
         description="RLBP Inference: predict RNA-ligand binding probability from PDB structures",
         formatter_class=argparse.RawDescriptionHelpFormatter,

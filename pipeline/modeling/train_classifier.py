@@ -341,6 +341,7 @@ def compute_metrics(y_true, probs, threshold=0.5):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def run_experiment(args):
+    warnings.warn("General/legacy comparison entry point. Current principal strict401 replay uses strict_runtime.py and frozen manifests.", RuntimeWarning)
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 

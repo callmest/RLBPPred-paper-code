@@ -1,5 +1,8 @@
 """
-Inference on four protein datasets using the trained SaProt-650M-AF2 + ensemble MLP.
+Legacy pickle-ensemble inference on four protein datasets.
+
+The current strict state_dict_ensemble_v1 checkpoint must be loaded with
+strict_runtime.py predict. This script remains for historical pickle models.
 
 Loads pre-extracted embeddings, runs ensemble prediction, saves probabilities,
 and plots probability density distributions.
@@ -92,8 +95,8 @@ def plot_density(dataset_probs: dict, save_dir: Path):
         "untrained_proteome": "#b3e5b3", # light green
     }
     labels = {
-        "sig_pos_ids": "Sig. Positive\n(Train Pos)",
-        "neg_ids": "Negative\n(Train Neg)",
+        "sig_pos_ids": "High-confidence\npositive benchmark",
+        "neg_ids": "Negative\nbenchmark",
         "potential_positive": "Potential\nPositive",
         "untrained_proteome": "Untrained\nProteome",
     }
@@ -108,7 +111,7 @@ def plot_density(dataset_probs: dict, save_dir: Path):
             stats.append({
                 'name': name,
                 'mean_prob': probs.mean(),
-                'pct_positive': (probs > 0.5).mean() * 100,
+                'pct_positive': (probs >= 0.5).mean() * 100,
                 'n': len(probs)
             })
 
@@ -145,7 +148,7 @@ def plot_density(dataset_probs: dict, save_dir: Path):
     bars2 = ax2.bar(x_pos, pct_positive, color=bar_colors, alpha=0.9, edgecolor='gray', linewidth=0.8)
     ax2.set_ylabel("Percentage Predicted as RLBP (%)", fontsize=12)
     ax2.set_xlabel("Dataset", fontsize=12)
-    ax2.set_title("Percentage Predicted as RLBP (prob > 0.5)", fontsize=13, fontweight='bold')
+    ax2.set_title("Percentage Predicted as RLBP (prob >= 0.5)", fontsize=13, fontweight='bold')
     ax2.set_xticks(x_pos)
     ax2.set_xticklabels(bar_labels, fontsize=10)
     ax2.set_ylim(0, 105)
@@ -178,6 +181,7 @@ def plot_density(dataset_probs: dict, save_dir: Path):
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
+    warnings.warn("Legacy pickle inference. Use strict_runtime.py predict for the current strict checkpoint.", RuntimeWarning)
     parser = argparse.ArgumentParser(description="Inference on four datasets")
     parser.add_argument("--checkpoint", default=str(REPOSITORY_ROOT / "results" / "sa_mlp_filter" / "ensemble.pkl"))
     parser.add_argument("--embedding-dir", default=str(REPOSITORY_ROOT / "data" / "embeddings" / "saprot-650m-af2"))
@@ -243,7 +247,7 @@ def main():
         # Stats
         print(f"  Prob stats: mean={probs.mean():.4f}, median={np.median(probs):.4f}, "
               f"std={probs.std():.4f}")
-        print(f"  >0.5: {(probs > 0.5).sum()} ({(probs > 0.5).mean()*100:.1f}%)")
+        print(f"  >=0.5: {(probs >= 0.5).sum()} ({(probs >= 0.5).mean()*100:.1f}%)")
 
         # Save per-dataset CSV
         csv_path = output_dir / f"{name}_predictions.csv"

@@ -1,0 +1,1065 @@
+{
+  "schema_version": 1,
+  "release": "v12_strict098_401_20261028",
+  "workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+  "panel_map_sha256": "5ce038a698aee4a7689e7333a1880b8aa01207c4cf4aa59ca0a717465045a633",
+  "index_sheet_exported": false,
+  "historical_sheets_exported": [],
+  "external_figures_included": true,
+  "omitted_optional_inputs": [],
+  "datasets": [
+    {
+      "id": "Figure1a",
+      "file": "Figure1a.csv",
+      "panels": [
+        "Figure1a"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure1b",
+      "source_range": "A3:F1433",
+      "header_row": 3,
+      "source_columns": [
+        "Gene",
+        "Cristini",
+        "Wang",
+        "Mosler",
+        "Yan",
+        "Shinriki"
+      ],
+      "columns": [
+        "Gene",
+        "Cristini",
+        "Wang",
+        "Mosler",
+        "Yan",
+        "Shinriki"
+      ],
+      "rows": 1430,
+      "sha256": "65076c2e0c529695779dac14b2402bb2dc70608a11b047b6223f2ced0594ba5b",
+      "plot_filter": null,
+      "description": "Five-study normalized reported-gene membership; derive exact overlap depths 2–5 for the corona chart."
+    },
+    {
+      "id": "Figure1b",
+      "file": "Figure1b.csv",
+      "panels": [
+        "Figure1b"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure1c",
+      "source_range": "A3:F20438",
+      "header_row": 3,
+      "source_columns": [
+        "Protein ID",
+        "Human Proteome",
+        "All Positive",
+        "GO-related",
+        "Domain-related",
+        "RloopBase"
+      ],
+      "columns": [
+        "Protein ID",
+        "GO-related",
+        "Domain-related",
+        "RloopBase"
+      ],
+      "rows": 20435,
+      "sha256": "d33381eeede47fd56ec3540390010aabb955c60b5272e012106d8272c933f0a1",
+      "plot_filter": null,
+      "description": "Three-source Venn membership; keep the full reviewed-proteome universe including zero-membership proteins."
+    },
+    {
+      "id": "Figure1d",
+      "file": "Figure1d.csv",
+      "panels": [
+        "Figure1d"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure1a",
+      "source_range": "A3:K14519",
+      "header_row": 3,
+      "source_columns": [
+        "direction",
+        "source",
+        "term_id",
+        "term_name",
+        "fg_hits",
+        "fg_size",
+        "bg_hits",
+        "bg_size",
+        "fold_enrichment",
+        "p_value",
+        "fdr_bh"
+      ],
+      "columns": [
+        "direction",
+        "source",
+        "term_id",
+        "term_name",
+        "fg_hits",
+        "fg_size",
+        "bg_hits",
+        "bg_size",
+        "fold_enrichment",
+        "p_value",
+        "fdr_bh"
+      ],
+      "rows": 14516,
+      "sha256": "bd830c062134ce522bcea0a7498bfc8ffd4a2ebc6c5a50d57ff059bfa9f54613",
+      "plot_filter": null,
+      "description": "Benchmark GO enrichment; direction identifies the over-represented class."
+    },
+    {
+      "id": "Figure2c",
+      "file": "Figure2c.csv",
+      "panels": [
+        "Figure2c"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure2d",
+      "source_range": "A3:G13",
+      "header_row": 3,
+      "source_columns": [
+        "Classifier",
+        "ESM-C 300M",
+        "ESM-C 600M",
+        "PST T33",
+        "PST T33-SO",
+        "SaProt AF2",
+        "SaProt PDB"
+      ],
+      "columns": [
+        "Classifier",
+        "ESM-C 300M",
+        "ESM-C 600M",
+        "PST T33",
+        "PST T33-SO",
+        "SaProt AF2",
+        "SaProt PDB"
+      ],
+      "rows": 10,
+      "sha256": "df69d9d2fe6f4ea806a1f0e7240332d66c5a8c74859dd3fa84a7554f60dedc20",
+      "plot_filter": null,
+      "description": "Validation AUPRC for the 60 representation–classifier combinations."
+    },
+    {
+      "id": "Figure3a",
+      "file": "Figure3a.csv",
+      "panels": [
+        "Figure3a"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure3a",
+      "source_range": "A3:D695",
+      "header_row": 3,
+      "source_columns": [
+        "label",
+        "auroc",
+        "fpr",
+        "tpr"
+      ],
+      "columns": [
+        "label",
+        "auroc",
+        "fpr",
+        "tpr"
+      ],
+      "rows": 692,
+      "sha256": "b36e41dbc2be7ae6c1c74907e504d9312ed78a2d906f7be0b8dbcabc5d460a5d",
+      "plot_filter": null,
+      "description": "Curated-benchmark and unfiltered-control ROC coordinates."
+    },
+    {
+      "id": "Figure3b",
+      "file": "Figure3b.csv",
+      "panels": [
+        "Figure3b"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure3b",
+      "source_range": "A3:D178",
+      "header_row": 3,
+      "source_columns": [
+        "label",
+        "auroc",
+        "fpr",
+        "tpr"
+      ],
+      "columns": [
+        "label",
+        "auroc",
+        "fpr",
+        "tpr"
+      ],
+      "rows": 175,
+      "sha256": "d2836698343c8aff40d891396026c8db0076afad0a0de78ae97c4f104e894cbf",
+      "plot_filter": null,
+      "description": "Strict RLBPPred and handcrafted-feature random-forest ROC coordinates."
+    },
+    {
+      "id": "Figure3c",
+      "file": "Figure3c.csv",
+      "panels": [
+        "Figure3c"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure3c",
+      "source_range": "A3:C7",
+      "header_row": 3,
+      "source_columns": [
+        "dataset",
+        "mean_probability",
+        "sample_size"
+      ],
+      "columns": [
+        "dataset",
+        "mean_probability",
+        "sample_size"
+      ],
+      "rows": 4,
+      "sha256": "42adb13f268e988de80ecc5a9119c841ddf6cacf210771eb9039e8ce77da61e6",
+      "plot_filter": null,
+      "description": "Human group mean probabilities from the strict MLP ensemble."
+    },
+    {
+      "id": "Figure3d",
+      "file": "Figure3d.csv",
+      "panels": [
+        "Figure3d"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure3d",
+      "source_range": "A3:C6",
+      "header_row": 3,
+      "source_columns": [
+        "dataset",
+        "mean_probability",
+        "sample_size"
+      ],
+      "columns": [
+        "dataset",
+        "mean_probability",
+        "sample_size"
+      ],
+      "rows": 3,
+      "sha256": "5c11121a94d4e34e131cf4b30578b64ea144625f181b23a6ee7fd4f4f35204ad",
+      "plot_filter": null,
+      "description": "Mouse group mean probabilities from the strict MLP ensemble."
+    },
+    {
+      "id": "Figure5a",
+      "file": "Figure5a.csv",
+      "panels": [
+        "Figure5a"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure4a",
+      "source_range": "A3:E18",
+      "header_row": 3,
+      "source_columns": [
+        "Group",
+        "Category",
+        "Count",
+        "Group total",
+        "Percentage (%)"
+      ],
+      "columns": [
+        "Group",
+        "Category",
+        "Count",
+        "Group total",
+        "Percentage (%)"
+      ],
+      "rows": 15,
+      "sha256": "303ddec0e1f2519535f776b939e467c8f672440df73102d31d776e5a5d9d6781",
+      "plot_filter": null,
+      "description": "EpiFactors categories; each percentage uses its own group denominator."
+    },
+    {
+      "id": "Figure5b",
+      "file": "Figure5b.csv",
+      "panels": [
+        "Figure5b"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure4b",
+      "source_range": "A3:G18",
+      "header_row": 3,
+      "source_columns": [
+        "Database",
+        "Group",
+        "Overlap count",
+        "Group total",
+        "Overlap (%)",
+        "Odds ratio",
+        "P value"
+      ],
+      "columns": [
+        "Database",
+        "Group",
+        "Overlap count",
+        "Group total",
+        "Overlap (%)",
+        "Odds ratio",
+        "P value"
+      ],
+      "rows": 15,
+      "sha256": "1e2c5e53c2f527ff9d45007e5292292926c521d0e7ff2e7ec954fe051db9491a",
+      "plot_filter": null,
+      "description": "LLPS database annotation overlap and one-sided Fisher tests against non-RLBPs."
+    },
+    {
+      "id": "Figure5c_summary",
+      "file": "Figure5c_summary.csv",
+      "panels": [
+        "Figure5c"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure5c",
+      "source_range": "A3:H6",
+      "header_row": 3,
+      "source_columns": [
+        "Group",
+        "Total proteins",
+        "Annotated proteins",
+        "Missing annotations",
+        "Median (%)",
+        "Q1 (%)",
+        "Q3 (%)",
+        "Mean (%)"
+      ],
+      "columns": [
+        "Group",
+        "Total proteins",
+        "Annotated proteins",
+        "Missing annotations",
+        "Median (%)",
+        "Q1 (%)",
+        "Q3 (%)",
+        "Mean (%)"
+      ],
+      "rows": 3,
+      "sha256": "e4c930d2415223f65cd1b5ed74cd2e92a99bd6e9828192700cd4fc06a22d0a6a",
+      "plot_filter": null,
+      "description": "Disorder summaries; non-RLBPs have 9059 annotated and 50 missing records."
+    },
+    {
+      "id": "Figure5c_stats",
+      "file": "Figure5c_stats.csv",
+      "panels": [
+        "Figure5c"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure5c",
+      "source_range": "A9:H12",
+      "header_row": 9,
+      "source_columns": [
+        "Group 1",
+        "Group 2",
+        "n1",
+        "n2",
+        "U statistic",
+        "P value",
+        "BH-adjusted q",
+        "Significance"
+      ],
+      "columns": [
+        "Group 1",
+        "Group 2",
+        "n1",
+        "n2",
+        "U statistic",
+        "P value",
+        "BH-adjusted q",
+        "Significance"
+      ],
+      "rows": 3,
+      "sha256": "15b1451172d9826505b226a9ff8bb47465b75e8259aaa2b580824b713b9e598d",
+      "plot_filter": null,
+      "description": "Two-sided Mann–Whitney tests; BH correction over three pairwise comparisons."
+    },
+    {
+      "id": "Figure5c_raw",
+      "file": "Figure5c_raw.csv",
+      "panels": [
+        "Figure5c"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure5c",
+      "source_range": "A19:L9905",
+      "header_row": 19,
+      "source_columns": [
+        "protein_id",
+        "group",
+        "group_id",
+        "group_label",
+        "disorder_fraction",
+        "disorder_percent",
+        "status",
+        "missing_disorder",
+        "included_in_main_analysis",
+        "annotation_snapshot",
+        "sequence_snapshot_mismatch",
+        "prediction_probability"
+      ],
+      "columns": [
+        "protein_id",
+        "group",
+        "group_id",
+        "group_label",
+        "disorder_fraction",
+        "disorder_percent",
+        "status",
+        "missing_disorder",
+        "included_in_main_analysis",
+        "annotation_snapshot",
+        "sequence_snapshot_mismatch",
+        "prediction_probability"
+      ],
+      "rows": 9886,
+      "sha256": "4f5c9fcaa1a652b6a0328a522b5613a44148ca117ede1725af2d06cce453c59f",
+      "plot_filter": {
+        "included_in_main_analysis": true
+      },
+      "description": "Per-protein disorder records, including missing annotations; missing is not zero."
+    },
+    {
+      "id": "Figure5d",
+      "file": "Figure5d.csv",
+      "panels": [
+        "Figure5d"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure4c",
+      "source_range": "A3:P16",
+      "header_row": 3,
+      "source_columns": [
+        "Rank",
+        "Consensus label",
+        "Width (aa)",
+        "Unique candidate proteins (n)",
+        "E-value",
+        "Composition group",
+        "Sequence description",
+        "Significant (E < 0.05)",
+        "Displayed (E ≤ 1.2)",
+        "−log10(E-value)",
+        "Cys count",
+        "Lys + Arg count",
+        "Lys/Arg fraction",
+        "Discovery proteins (n)",
+        "Holdout proteins (n)",
+        "XML log10(E-value)"
+      ],
+      "columns": [
+        "Rank",
+        "Consensus label",
+        "Width (aa)",
+        "Unique candidate proteins (n)",
+        "E-value",
+        "Composition group",
+        "Sequence description",
+        "Significant (E < 0.05)",
+        "Displayed (E ≤ 1.2)",
+        "−log10(E-value)",
+        "Cys count",
+        "Lys + Arg count",
+        "Lys/Arg fraction",
+        "Discovery proteins (n)",
+        "Holdout proteins (n)",
+        "XML log10(E-value)"
+      ],
+      "rows": 13,
+      "sha256": "753b975924bbd1b28059b466f1f6cc57a91ce81550dd076241eb29e509d8608c",
+      "plot_filter": {
+        "Displayed (E ≤ 1.2)": "Yes"
+      },
+      "description": "All 13 STREME motifs: 11 displayed (E≤1.2), 7 significant (E<0.05); 401 candidates versus 9109 controls."
+    },
+    {
+      "id": "SupplementaryFigure1a",
+      "file": "SupplementaryFigure1a.csv",
+      "panels": [
+        "SupplementaryFigure1a"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "Figure1c",
+      "source_range": "A3:F20438",
+      "header_row": 3,
+      "source_columns": [
+        "Protein ID",
+        "Human Proteome",
+        "All Positive",
+        "GO-related",
+        "Domain-related",
+        "RloopBase"
+      ],
+      "columns": [
+        "Protein ID",
+        "Human Proteome",
+        "All Positive",
+        "GO-related",
+        "Domain-related",
+        "RloopBase"
+      ],
+      "rows": 20435,
+      "sha256": "3e6c601375b77be2fb8331c3986c250b1e7e3ef55773deb1fe381ca9681abbbe",
+      "plot_filter": null,
+      "description": "Five-set UpSet membership, including Human Proteome; domain exclusion remains current."
+    },
+    {
+      "id": "SupplementaryFigure2_3_umap",
+      "file": "SupplementaryFigure2_3_umap.csv",
+      "panels": [
+        "SupplementaryFigure2a",
+        "SupplementaryFigure2b",
+        "SupplementaryFigure2c",
+        "SupplementaryFigure2d",
+        "SupplementaryFigure2e",
+        "SupplementaryFigure2f",
+        "SupplementaryFigure3a",
+        "SupplementaryFigure3b",
+        "SupplementaryFigure3c",
+        "SupplementaryFigure3d",
+        "SupplementaryFigure3e",
+        "SupplementaryFigure3f"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure2a",
+      "source_range": "A3:F61425",
+      "header_row": 3,
+      "source_columns": [
+        "Representation",
+        "Subset",
+        "Protein ID",
+        "UMAP_1",
+        "UMAP_2",
+        "Label"
+      ],
+      "columns": [
+        "Representation",
+        "Subset",
+        "Protein ID",
+        "UMAP_1",
+        "UMAP_2",
+        "Label"
+      ],
+      "rows": 61422,
+      "sha256": "7e2b07ebda7dba6f68b3904eecd5083476f897d6b707339dba02a4753e058bca",
+      "plot_filter": null,
+      "description": "UMAP coordinates. Sup2: ESM-C300M, ESM-C600M, PST T33; Sup3: SaProt PDB, PST T33-SO, SaProt AF2. Each has full then sampled."
+    },
+    {
+      "id": "SupplementaryFigure4",
+      "file": "SupplementaryFigure4.csv",
+      "panels": [
+        "SupplementaryFigure4a",
+        "SupplementaryFigure4b",
+        "SupplementaryFigure4c",
+        "SupplementaryFigure4d",
+        "SupplementaryFigure4e"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure2b",
+      "source_range": "A3:I63",
+      "header_row": 3,
+      "source_columns": [
+        "Representation",
+        "Classifier",
+        "AUROC",
+        "AUPRC",
+        "F1",
+        "Precision",
+        "Recall",
+        "MCC",
+        "ACC"
+      ],
+      "columns": [
+        "Representation",
+        "Classifier",
+        "AUROC",
+        "AUPRC",
+        "F1",
+        "Precision",
+        "Recall",
+        "MCC",
+        "ACC"
+      ],
+      "rows": 60,
+      "sha256": "b2c4bd2569eb0dd5f7158786a505ffda2497e7728991d1a9fbb0c07e65c763ea",
+      "plot_filter": null,
+      "description": "Sixty-model metrics; displayed panel order AUROC, F1, MCC, Precision, Recall."
+    },
+    {
+      "id": "SupplementaryFigure5a",
+      "file": "SupplementaryFigure5a.csv",
+      "panels": [
+        "SupplementaryFigure5a"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure2c_ratio",
+      "source_range": "A3:I6",
+      "header_row": 3,
+      "source_columns": [
+        "neg_ratio",
+        "n_rounds",
+        "auroc",
+        "auprc",
+        "f1",
+        "precision",
+        "recall",
+        "mcc",
+        "accuracy"
+      ],
+      "columns": [
+        "neg_ratio",
+        "n_rounds",
+        "auroc",
+        "auprc",
+        "f1",
+        "precision",
+        "recall",
+        "mcc",
+        "accuracy"
+      ],
+      "rows": 3,
+      "sha256": "84f02f58032579e13d2ff09d8b90bf8c9d578ab11117d64d43d01aea13e4ec7c",
+      "plot_filter": null,
+      "description": "Independent sampling-ratio robustness, 300 rounds; do not replace by final-model single metrics."
+    },
+    {
+      "id": "SupplementaryFigure5b",
+      "file": "SupplementaryFigure5b.csv",
+      "panels": [
+        "SupplementaryFigure5b"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure2c_rounds",
+      "source_range": "A3:I7",
+      "header_row": 3,
+      "source_columns": [
+        "neg_ratio",
+        "n_rounds",
+        "auroc",
+        "auprc",
+        "f1",
+        "precision",
+        "recall",
+        "mcc",
+        "accuracy"
+      ],
+      "columns": [
+        "neg_ratio",
+        "n_rounds",
+        "auroc",
+        "auprc",
+        "f1",
+        "precision",
+        "recall",
+        "mcc",
+        "accuracy"
+      ],
+      "rows": 4,
+      "sha256": "746131cce15f8dec3e5ddba1d4e699c6f85ad193746f08011fb55a3a7f1cde7c",
+      "plot_filter": null,
+      "description": "Independent cumulative-round robustness at 1:1 sampling."
+    },
+    {
+      "id": "SupplementaryFigure5cd",
+      "file": "SupplementaryFigure5cd.csv",
+      "panels": [
+        "SupplementaryFigure5c",
+        "SupplementaryFigure5d"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure2d",
+      "source_range": "A3:J6",
+      "header_row": 3,
+      "source_columns": [
+        "strategy",
+        "description",
+        "n_rounds",
+        "auroc",
+        "auprc",
+        "f1",
+        "precision",
+        "recall",
+        "mcc",
+        "accuracy"
+      ],
+      "columns": [
+        "strategy",
+        "description",
+        "n_rounds",
+        "auroc",
+        "auprc",
+        "f1",
+        "precision",
+        "recall",
+        "mcc",
+        "accuracy"
+      ],
+      "rows": 3,
+      "sha256": "94866c7e9e31d66a51ef53d31b8905ac735d67e84e91d1fcdcee3e84009e3990",
+      "plot_filter": null,
+      "description": "Independent undersampling strategies; panel c is AUPRC, panel d AUROC."
+    },
+    {
+      "id": "SupplementaryFigure6a",
+      "file": "SupplementaryFigure6a.csv",
+      "panels": [
+        "SupplementaryFigure6a"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure3a",
+      "source_range": "A3:D7",
+      "header_row": 3,
+      "source_columns": [
+        "true_label",
+        "predicted_label",
+        "count",
+        "row_percentage"
+      ],
+      "columns": [
+        "true_label",
+        "predicted_label",
+        "count",
+        "row_percentage"
+      ],
+      "rows": 4,
+      "sha256": "49b6d72a473386adab629672790094ef4bbd7f88e83dd97561f4ba1b90915739",
+      "plot_filter": null,
+      "description": "Held-out confusion matrix at probability≥0.5: TN1732, FP89, FN4, TP71."
+    },
+    {
+      "id": "SupplementaryFigure6b",
+      "file": "SupplementaryFigure6b.csv",
+      "panels": [
+        "SupplementaryFigure6b"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure3b",
+      "source_range": "A3:F104",
+      "header_row": 3,
+      "source_columns": [
+        "threshold",
+        "heldout_negative_fpr_percent",
+        "heldout_negative_pass_count",
+        "heldout_negative_n",
+        "untrained_candidate_count",
+        "untrained_scored_n"
+      ],
+      "columns": [
+        "threshold",
+        "heldout_negative_fpr_percent",
+        "heldout_negative_pass_count",
+        "heldout_negative_n",
+        "untrained_candidate_count",
+        "untrained_scored_n"
+      ],
+      "rows": 101,
+      "sha256": "c37823afa75f9a4c4a8528d29f1d15170e0f80aa5ed3dd863f328a8ff96aa99c",
+      "plot_filter": null,
+      "description": "Exact 0.98 row: 1/1821 empirical FPR, 401/5640 candidates; empirical FPR target≤0.1%."
+    },
+    {
+      "id": "SupplementaryFigure6c",
+      "file": "SupplementaryFigure6c.csv",
+      "panels": [
+        "SupplementaryFigure6c"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure3c",
+      "source_range": "A3:C7",
+      "header_row": 3,
+      "source_columns": [
+        "dataset",
+        "percentage_positive",
+        "sample_size"
+      ],
+      "columns": [
+        "dataset",
+        "percentage_positive",
+        "sample_size"
+      ],
+      "rows": 4,
+      "sha256": "0de08eb74c7cba5ef0664921a55adcf9489c2821d54da14ea9216fc85fd27c55",
+      "plot_filter": null,
+      "description": "Human group call rates at probability≥0.5, distinct from the 0.98 discovery cutoff."
+    },
+    {
+      "id": "SupplementaryFigure6d",
+      "file": "SupplementaryFigure6d.csv",
+      "panels": [
+        "SupplementaryFigure6d"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure3d",
+      "source_range": "A3:C6",
+      "header_row": 3,
+      "source_columns": [
+        "dataset",
+        "percentage_positive",
+        "sample_size"
+      ],
+      "columns": [
+        "dataset",
+        "percentage_positive",
+        "sample_size"
+      ],
+      "rows": 3,
+      "sha256": "20c8aedb1582645d0aaf5c65c484d1e41a50dc67cca58d06ac76fdd6bf13204d",
+      "plot_filter": null,
+      "description": "Mouse group call rates at probability≥0.5; no calibrated mouse FPR claim."
+    },
+    {
+      "id": "SupplementaryFigure7a",
+      "file": "SupplementaryFigure7a.csv",
+      "panels": [
+        "SupplementaryFigure7a"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure4a",
+      "source_range": "A3:F6",
+      "header_row": 3,
+      "source_columns": [
+        "Group",
+        "EpiFactors-annotated",
+        "Group total",
+        "Percentage (%)",
+        "Odds ratio (vs Non-RLBP)",
+        "P value"
+      ],
+      "columns": [
+        "Group",
+        "EpiFactors-annotated",
+        "Group total",
+        "Percentage (%)",
+        "Odds ratio (vs Non-RLBP)",
+        "P value"
+      ],
+      "rows": 3,
+      "sha256": "2e19f1182411f13500c0c3659440250517cd1c3b697eeb977a22c65f4615ca5c",
+      "plot_filter": null,
+      "description": "Overall EpiFactors overlap: 63/401 candidates, 71/376 known, 65/9109 non-RLBPs."
+    },
+    {
+      "id": "SupplementaryFigure7b",
+      "file": "SupplementaryFigure7b.csv",
+      "panels": [
+        "SupplementaryFigure7b"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure4b",
+      "source_range": "A3:G13",
+      "header_row": 3,
+      "source_columns": [
+        "Group",
+        "Category",
+        "Count",
+        "Group total",
+        "Odds ratio",
+        "P value",
+        "-log10(P)"
+      ],
+      "columns": [
+        "Group",
+        "Category",
+        "Count",
+        "Group total",
+        "Odds ratio",
+        "P value",
+        "-log10(P)"
+      ],
+      "rows": 10,
+      "sha256": "3c1ea3849ad9d223f86a23e947855fe6db0c6deda013112d415f5eecd347d5be",
+      "plot_filter": null,
+      "description": "Category-specific EpiFactors enrichment against non-RLBPs."
+    },
+    {
+      "id": "SupplementaryFigure7c",
+      "file": "SupplementaryFigure7c.csv",
+      "panels": [
+        "SupplementaryFigure7c"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure4c",
+      "source_range": "A3:C6",
+      "header_row": 3,
+      "source_columns": [
+        "Composition group",
+        "Significant motifs (E < 0.05)",
+        "Total displayed motifs (E ≤ 1.2)"
+      ],
+      "columns": [
+        "Composition group",
+        "Significant motifs (E < 0.05)",
+        "Total displayed motifs (E ≤ 1.2)"
+      ],
+      "rows": 3,
+      "sha256": "40998603461c57313577a8c6800dfd28dabb5217ba9e94c026ff55794e2f3272",
+      "plot_filter": null,
+      "description": "Descriptive sequence-composition groups, not validated motif functions: 3/3, 4/6, 0/2."
+    },
+    {
+      "id": "SupplementaryFigure7d",
+      "file": "SupplementaryFigure7d.csv",
+      "panels": [
+        "SupplementaryFigure7d"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SupplementaryFigure7d",
+      "source_range": "A3:I63",
+      "header_row": 3,
+      "source_columns": [
+        "Protein group",
+        "Proteins (n)",
+        "Amino acid",
+        "Residue count",
+        "Standard residues (total)",
+        "Pooled fraction",
+        "Pooled percentage (%)",
+        "Amino-acid class",
+        "Excluded nonstandard residues"
+      ],
+      "columns": [
+        "Protein group",
+        "Proteins (n)",
+        "Amino acid",
+        "Residue count",
+        "Standard residues (total)",
+        "Pooled fraction",
+        "Pooled percentage (%)",
+        "Amino-acid class",
+        "Excluded nonstandard residues"
+      ],
+      "rows": 60,
+      "sha256": "39633bada48fef596df1aa96bb723c6112d96bdc258b2df00476b145f62881c2",
+      "plot_filter": null,
+      "description": "Pooled standard-residue composition across 401/376/9109 proteins, not a mean of per-protein proportions."
+    },
+    {
+      "id": "SupplementaryFigure8_all_GO",
+      "file": "SupplementaryFigure8_all_GO.csv",
+      "panels": [
+        "SupplementaryFigure8"
+      ],
+      "source_workbook": "sourcedata_v3.xlsx",
+      "source_workbook_sha256": "189e992a3b493176760f0273806adf0fcde9ff7d9defbfe0440ce00a67c20195",
+      "source_sheet": "SuppFigure8",
+      "source_range": "A5:P3087",
+      "header_row": 5,
+      "source_columns": [
+        "group",
+        "aspect",
+        "term_id",
+        "term_name",
+        "n",
+        "hits",
+        "percent",
+        "bg_n",
+        "bg_hits",
+        "bg_percent",
+        "odds_ratio",
+        "p_value",
+        "hit_ids",
+        "q_bh",
+        "plot_selected",
+        "selection_reason"
+      ],
+      "columns": [
+        "group",
+        "aspect",
+        "term_id",
+        "term_name",
+        "n",
+        "hits",
+        "percent",
+        "bg_n",
+        "bg_hits",
+        "bg_percent",
+        "odds_ratio",
+        "p_value",
+        "hit_ids",
+        "q_bh",
+        "plot_selected",
+        "selection_reason"
+      ],
+      "rows": 3082,
+      "sha256": "21a6472e67229793316c9fca46101e7a3b06ade784a85cd48497e8a6f8a18b89",
+      "plot_filter": {
+        "plot_selected": 1
+      },
+      "description": "Complete tested GO universe: 88 significant terms, 18 plotted; 401 candidates versus 5237 other annotated untrained-pool proteins."
+    },
+    {
+      "id": "Figure6_query",
+      "file": "Figure6_query.csv",
+      "panels": [
+        "Figure6"
+      ],
+      "source_file": "Figure6_query_source_data.csv",
+      "source_sha256": "f9436709ce8b38df993bb70529bbf366333b8d262fb500c618dd7d4795c713ff",
+      "sha256": "f9436709ce8b38df993bb70529bbf366333b8d262fb500c618dd7d4795c713ff",
+      "description": "Six illustrative DNA-topoisomerase query records; only TOP3B is a novel candidate.",
+      "columns": [
+        "uniprot_id",
+        "species",
+        "gene_name",
+        "gene_names_all",
+        "gene_description",
+        "protein_name",
+        "functional_annotation",
+        "confidence",
+        "reviewed",
+        "entry_name",
+        "length",
+        "uniprot_page_source",
+        "pdb_page_source",
+        "alphafold2_page_source",
+        "evidence_group",
+        "novel_candidate_401"
+      ],
+      "rows": 6
+    },
+    {
+      "id": "Figure6_metadata",
+      "file": "Figure6_metadata.json",
+      "panels": [
+        "Figure6"
+      ],
+      "source_file": "Figure6_metadata.json",
+      "source_sha256": "9a36aec27e858e13641dba8a9df78963624f9b09ea80987e767151e9e6088e82",
+      "sha256": "9a36aec27e858e13641dba8a9df78963624f9b09ea80987e767151e9e6088e82",
+      "description": "Frozen query, database coverage, model and prediction/candidate hashes; copied byte-for-byte."
+    }
+  ]
+}

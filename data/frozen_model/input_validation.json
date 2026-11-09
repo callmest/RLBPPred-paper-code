@@ -1,0 +1,13 @@
+{
+  "shape": [
+    9485,
+    1280
+  ],
+  "positive": 376,
+  "negative": 9109,
+  "train_positive": 301,
+  "train_negative": 7288,
+  "validation_positive": 75,
+  "validation_negative": 1821,
+  "embedding_matrix_sha256": "c874fc7373aed7535b5652db324ecdbdf3f97f6024c2cef5352a283b1fa3697e"
+}

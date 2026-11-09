@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 from pathlib import Path
 
 FIELDS = [
@@ -31,10 +32,10 @@ def to_float(value: str):
     text = str(value).strip()
     if text in ('', 'NA', 'nan', 'None'):
         return None
-    try:
-        return float(text)
-    except ValueError:
-        return None
+    result = float(text)
+    if not math.isfinite(result) or not 0 <= result <= 1:
+        raise ValueError(f'Invalid prediction score: {text}')
+    return result
 
 
 def to_int(value: str):
@@ -51,6 +52,11 @@ def main() -> None:
     args = parse_args()
     if not args.input.exists():
         raise FileNotFoundError(f'Input CSV not found: {args.input}')
+    if args.json_out.resolve() == args.csv_out.resolve():
+        raise ValueError('JSON and CSV outputs must be different files.')
+    for path in (args.json_out, args.csv_out):
+        if path.exists():
+            raise FileExistsError(f'Output exists; choose a new path: {path}')
 
     args.json_out.parent.mkdir(parents=True, exist_ok=True)
     args.csv_out.parent.mkdir(parents=True, exist_ok=True)
@@ -74,7 +80,7 @@ def main() -> None:
         for row in rows:
             out = row.copy()
             out['reviewed'] = 'true' if row['reviewed'] else 'false'
-            out['confidence'] = '' if row['confidence'] is None else f"{row['confidence']:.6f}".rstrip('0').rstrip('.')
+            out['confidence'] = '' if row['confidence'] is None else repr(row['confidence'])
             out['length'] = '' if row['length'] is None else str(row['length'])
             writer.writerow(out)
 

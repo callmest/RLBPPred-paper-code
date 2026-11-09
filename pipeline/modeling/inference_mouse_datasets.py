@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-Inference on mouse protein datasets using trained human RLBP model.
+Legacy pickle-ensemble inference on mouse protein datasets.
+
+Use strict_runtime.py predict for the current strict state_dict checkpoint.
+Mouse predictions are zero-shot; mouse groups are not training groups.
 
 Usage:
   python scripts/inference_mouse_datasets.py \
@@ -14,6 +17,7 @@ Usage:
 import argparse
 import csv
 import pickle
+import warnings
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
@@ -131,7 +135,7 @@ def plot_density(dataset_probs: dict, save_dir: Path):
     }
     labels = {
         "significant_positive": "Sig. Positive\n(Train Pos)",
-        "negative": "Negative\n(Train Neg)",
+        "negative": "Mouse negative\ngroup",
         "potential_positive": "Potential\nPositive",
     }
 
@@ -145,7 +149,7 @@ def plot_density(dataset_probs: dict, save_dir: Path):
             stats.append({
                 'name': name,
                 'mean_prob': probs.mean(),
-                'pct_positive': (probs > 0.5).mean() * 100,
+                'pct_positive': (probs >= 0.5).mean() * 100,
                 'n': len(probs)
             })
 
@@ -182,7 +186,7 @@ def plot_density(dataset_probs: dict, save_dir: Path):
     bars2 = ax2.bar(x_pos, pct_positive, color=bar_colors, alpha=0.9, edgecolor='gray', linewidth=0.8)
     ax2.set_ylabel("Percentage Predicted as RLBP (%)", fontsize=12)
     ax2.set_xlabel("Dataset", fontsize=12)
-    ax2.set_title("Percentage Predicted as RLBP (prob > 0.5, Mouse)", fontsize=13, fontweight='bold')
+    ax2.set_title("Percentage Predicted as RLBP (prob >= 0.5, Mouse)", fontsize=13, fontweight='bold')
     ax2.set_xticks(x_pos)
     ax2.set_xticklabels(bar_labels, fontsize=10)
     ax2.set_ylim(0, 105)
@@ -215,6 +219,7 @@ def plot_density(dataset_probs: dict, save_dir: Path):
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
+    warnings.warn("Legacy pickle inference. Use strict_runtime.py predict for the current strict checkpoint.", RuntimeWarning)
     parser = argparse.ArgumentParser(description="Inference on mouse datasets")
     parser.add_argument("--checkpoint", default=str(REPOSITORY_ROOT / "results" / "sa_mlp_filter" / "ensemble.pkl"))
     parser.add_argument("--embedding-dir", default=str(REPOSITORY_ROOT / "data" / "embeddings" / "saprot-650m-af2" / "mouse_proteome_mean"))
@@ -297,7 +302,7 @@ def main():
 
         # Stats
         print(f"  Prob stats: mean={probs.mean():.4f}, median={np.median(probs):.4f}, std={probs.std():.4f}")
-        print(f"  >0.5: {(probs > 0.5).sum()} ({(probs > 0.5).mean()*100:.1f}%)")
+        print(f"  >=0.5: {(probs >= 0.5).sum()} ({(probs >= 0.5).mean()*100:.1f}%)")
 
         # Save predictions
         output_file = output_dir / f"{dataset_name}_predictions.csv"
@@ -340,13 +345,13 @@ def main():
 
     # Summary table
     print("=" * 60)
-    print(f"{'Dataset':<30} {'N':>6} {'Mean':>8} {'Median':>8} {'>0.5':>6} {'%>0.5':>8}")
+    print(f"{'Dataset':<30} {'N':>6} {'Mean':>8} {'Median':>8} {'>=0.5':>6} {'%>=0.5':>8}")
     print("─" * 60)
     for name in dataset_names:
         probs = dataset_probs[name]
         if len(probs) > 0:
             print(f"{name:<30} {len(probs):>6} {probs.mean():>8.4f} {np.median(probs):>8.4f} "
-                  f"{(probs > 0.5).sum():>6} {(probs > 0.5).mean()*100:>7.1f}%")
+                  f"{(probs >= 0.5).sum():>6} {(probs >= 0.5).mean()*100:>7.1f}%")
 
 
 if __name__ == "__main__":

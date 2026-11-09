@@ -1,5 +1,9 @@
 """
-SaProt-650M-AF2 + MLP training on the filtered dataset.
+Legacy/general SaProt-650M-AF2 + MLP training on supplied ID lists.
+
+For the CURRENT frozen strict401 split, RNG protocol and checkpoint format,
+use strict_runtime.py. This legacy entry point preserves historical behavior:
+input-list order affects its split and --seed does not seed PyTorch training.
 
 Loads SaProt-AF2 embeddings by protein ID, trains a balanced subsampling
 ensemble of MLP classifiers, saves checkpoint for inference.
@@ -241,6 +245,7 @@ def plot_roc(metrics, save_path):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def main():
+    warnings.warn("Legacy ID-order training entry point. Use strict_runtime.py train for the current frozen strict protocol.", RuntimeWarning)
     parser = argparse.ArgumentParser(
         description="SaProt-650M-AF2 + MLP balanced subsampling ensemble training"
     )

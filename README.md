@@ -1,175 +1,136 @@
 # RLBPPred reproducibility package
 
-[![Validate reproducibility package](https://github.com/callmest/RLBPPred/actions/workflows/validate.yml/badge.svg)](https://github.com/callmest/RLBPPred/actions/workflows/validate.yml)
-[![License: MIT](https://img.shields.io/badge/Code%20license-MIT-blue.svg)](LICENSE)
+Code and frozen results for the current **strict401 / manuscript v12** profile.
+This checkout is being prepared for the next GitHub release; the release is not
+claimed to be online until its tag and assets are visible.
 
-This repository contains the code, curated identifiers, panel-level source
-data, and documentation associated with **RLBPPred**, a structure-aware protein
-language-model framework for proteome-scale prediction of R-loop-binding
-proteins.
+RLBPPred uses frozen SaProt-650M-AF2 representations and a 300-member balanced
+MLP ensemble. The strict benchmark contains 376 positives and 9,109 negatives.
+Each member uses 301 training positives and 301 sampled training negatives;
+75 positives and 1,821 negatives are held out. Human discovery uses scores
+**>=0.98**, with **1/1,821** held-out false positives (empirical FPR **0.0549%**,
+below the **0.1%** target), yielding **401 candidates** in the 5,640-protein
+scored untrained pool. This empirical target is not a population-level guarantee.
+Classification summaries retain the separate threshold **0.5**.
 
-The release is organized around two reproducibility levels:
+## Two codebases
 
-- **Fast figure reproduction** rebuilds 26 computational figure panels from
-  committed, final-numbered CSV files and validates manuscript-critical values.
-- **Full pipeline audit and reconstruction** exposes 44 inventoried first-party
-  scripts for embedding extraction, training, inference, downstream analyses,
-  and RLBPPredDB construction, while explicitly recording external assets and
-  steps that are not yet independently reconstructable.
+The [callmest/RLBPPred repository](https://github.com/callmest/RLBPPred)
+retains model training, downstream analyses, frozen scientific evidence and
+manuscript-figure reproduction. The independent
+[callmest/RLBPPred-inference repository](https://github.com/callmest/RLBPPred-inference)
+is the publication target for the installable `rlbppred` command: structure
+acquisition, SaProt feature extraction and pretrained prediction, as well as
+prediction from matching raw, 1,280-dimensional embeddings. It does not depend
+on this repository's directory layout or include training and plotting
+workflows. The prediction repository's release documentation records which
+workflow and asset versions have actually passed acceptance testing.
 
-The repository does not claim that a plotting script can repeat wet-lab
-experiments or recreate manually assembled Illustrator panels and browser
-screenshots. Those boundaries are listed in
-[`docs/known_limitations.md`](docs/known_limitations.md).
+The existing `pipeline/modeling/strict_runtime.py predict` entrypoint remains
+available for compatibility and numerical regression checks. The new inference
+interface uses a safe `safetensors` model bundle converted from the
+SHA256-verified frozen checkpoint. The release plan supplies weights separately
+through the prediction repository's GitHub Releases, not Git or the installation wheel.
+The SaProt encoder is obtained directly from its version-pinned official
+source. No PyPI publication or Zenodo archive is required or claimed. See
+[codebase roles, installation and asset sources](docs/codebase_split.md).
 
-## Quick start
+## Quick start: validate and redraw frozen results
 
-Python 3.10 or 3.11 is recommended for the figure-only route.
+Use a checkout containing `data/panels/current/` and `data/frozen_model/`
+with the documented hashes. During release preparation, do not assume that the
+remote default branch already contains every file in this checkout.
 
 ```bash
-git clone https://github.com/callmest/RLBPPred.git
-cd RLBPPred
-
+# Start in the repository root.
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
 python -m pip install -r requirements-figures.txt
-
-python scripts/validate_release.py --root .
-python scripts/reproduce_figures.py \
-  --all \
-  --data-dir data/panels \
-  --output-dir outputs/figures
+python scripts/validate_release.py --root . --report outputs/current_validation.json
+python scripts/reproduce_figures.py --all \
+  --data-dir data/panels/current --output-dir outputs/current_figures
 ```
 
-The equivalent short commands are:
+These commands validate packaged evidence and generate quantitative panels in
+PNG, SVG and PDF. They do not train a model, run STREME, fetch annotations, alter
+the manuscript, or publish a website. Final Illustrator layouts, experimental
+images, structure surfaces and the database screenshot are not fabricated by
+the plotting command. Output directories should be separate from source data.
+
+For the complete offline tests and metadata checks, install the validation
+dependencies in a disposable environment:
 
 ```bash
-make validate-release
-make reproduce-figures
+python -m pip install -r requirements-test.txt
+python -m pytest -q
+make validate
 ```
 
-To generate one panel only:
+These dependency ranges describe supported validation tools, not the original
+training environment. The observed validation versions and actual acceptance
+results are recorded in [validation status](docs/validation_status.md).
 
-```bash
-python scripts/reproduce_figures.py \
-  --figure Fig3e \
-  --data-dir data/panels \
-  --output-dir outputs/figures
-```
+## Three reproducibility levels
 
-Every supported panel is written as both PNG and SVG. Generated outputs are
-ignored by Git so a local run does not dirty the repository.
+| Level | Packaged material | Scope |
+|---|---|---|
+| Frozen-result replay | Current panel CSVs, complete human/mouse scores, 401 candidates, validation predictions, source hashes | Validate numbers and regenerate quantitative plots without weights or a GPU |
+| Frozen-checkpoint inference | State-dict loader, frozen scaler contract, checkpoint hash | Requires the separately supplied trusted checkpoint and matching embeddings; no fitting |
+| Training/analysis reconstruction | Exact strict split and 300 sampling rounds, training protocol, parameterized analysis code | Requires external large assets and pinned environments; not claimed as an independently completed end-to-end rerun |
 
-## Reproducibility coverage
+See [model and inference instructions](docs/reproduce_model.md),
+[figure mapping and export instructions](docs/reproduce_figures.md), and
+[remaining limitations](docs/known_limitations.md).
 
-| Manuscript content | Release status |
-|---|---|
-| Fig. 1b; Fig. 2b; Fig. 3a–e; Fig. 5a–d | Reconstructed from committed panel CSV files |
-| Supplementary Fig. 1a–c, 2a–d, 3a–d, and 5a–d | Reconstructed from committed panel CSV files |
-| Fig. 1a and Fig. 2a | Manual workflow schematics; method and data lineage are documented |
-| Fig. 4a,c | Wet-lab panels; source-image and experiment requirements are documented |
-| Fig. 4b,d | External APBS/ChimeraX workflow; exact historical maps and camera sessions remain required |
-| Fig. 6a,b | Static-site screenshots; database-build scripts and validation records are included |
-| Final multipanel layout | Manual Illustrator composition; generated panels are not expected to be byte-identical to the submitted PDFs |
+## Current data and provenance
 
-The current manuscript contains Supplementary Figures 1, 2, 3, and 5. There
-are no Supplementary Figures 4 or 6 in the final numbering.
+- `data/panels/current/`: current quantitative data, mapped to six main figures
+  and eight supplementary figures. `manifest.json` identifies exact source
+  workbook ranges, columns, row counts and hashes.
+- `data/frozen_model/`: strict split, all 300 sampling lists/orderings,
+  validation metrics, validation/human/mouse predictions and scored candidates.
+- `data/model_inputs/`: input accession lists. The 1,879 potential-positive and
+  5,649 untrained input IDs are distinct from scored coverage (1,844 and 5,640).
+- `data/frozen_analysis/`: available frozen downstream evidence and provenance.
+- `configs/paper.yaml`: explicit current model, classification, discovery and
+  database conventions; it is not a substitute for the frozen manifests.
 
-See [`docs/reproduce_figures.md`](docs/reproduce_figures.md) for the exact
-panel-to-file map and [`docs/reproduce_model.md`](docs/reproduce_model.md) for
-the downstream training and structure-to-prediction workflows.
+Historical top-level `data/panels/*.csv` and the original analysis scripts are
+retained for provenance, including the previously corrected Figure2b metric.
+They are **not** the default current profile. Do not mix them with
+`data/panels/current/`. Old documentation is under `docs/history/20260826/`.
 
-## Released data
+The 59 other representation/classifier comparisons, unfiltered and random-forest
+controls, and independent sampling-robustness experiments remain their own
+experiments; their results are not replaced by the final ensemble's metrics.
 
-`data/panels/` contains 34 panel-level CSV files plus a checksum manifest.
-These are the canonical inputs for the fast reproduction route. In particular:
+## Database: local deployment only
 
-- Figure 1b contains 1,430 normalized records, with 407 proteins present in at
-  least two studies and four present in all five studies.
-- The five study sizes are 462, 364, 308, 434, and 430.
-- Figure 3a uses the final labels: filtered benchmark AUROC 0.9925 and
-  unfiltered dataset AUROC 0.9001.
+The separate [RLBPPredDB repository](https://github.com/callmest/RLBPPredDB)
+contains the browser application and local deployment instructions. No public
+server is required: serve it on `127.0.0.1` using Python's HTTP server.
 
-`data/model_inputs/` provides six accession manifests defining the recurrent
-positives, final positive and negative benchmark classes, potential positives,
-untrained proteome, and 342 high-confidence candidates. Protein sequences can
-be retrieved from the [UniProt website REST API](https://www.uniprot.org/help/programmatic_access)
-using `scripts/download_uniprot_fasta.py`; archive the database release and
-checksums for a frozen run.
+Current database evidence covers 37,077 annotation records, with 33,971 strict
+scores and 3,106 unscored human records. Missing scores remain null/blank, not
+zero or historical scores. The browser has 14 fields; the construction
+intermediate has 15, including sequence. Scores retain full precision in data
+files and are displayed to six decimals. See [database reconstruction](docs/reproduce_model.md#database-exports).
+Use a database version matching the documented hashes; its remote publication
+status is separate from the reproducibility and prediction releases.
 
-The complete external-source inventory and missing snapshot metadata are
-listed in [`docs/data_sources.md`](docs/data_sources.md). The code license does
-not relicense third-party datasets, models, or executables.
+## Documentation
 
-## Validation targets
+- [Repository map](docs/repository_map.md)
+- [Figure reproduction](docs/reproduce_figures.md)
+- [Model, inference and database reconstruction](docs/reproduce_model.md)
+- [Sources and asset availability](docs/data_sources.md)
+- [Known limitations](docs/known_limitations.md)
+- [Validation status](docs/validation_status.md)
 
-The automated release validator checks, among other invariants:
+## Citation and license
 
-- 376 final positives and 9,109 final negatives in the released identifier
-  manifests;
-- SaProt-AF2 + MLP as the strongest tested combination, with AUROC 0.9925 and
-  AUPRC 0.9264;
-- the held-out confusion matrix values 1,729/92/4/71 at threshold 0.5;
-- RLBPPredDB scope of 20,075 human and 17,002 mouse proteins (37,077 total);
-- the TOP1 example, UniProt P11387, with confidence 0.999743;
-- panel-file checksums, required documentation, broken links, and files too
-  large for ordinary GitHub storage.
-
-The manuscript configuration is summarized in
-[`configs/paper.yaml`](configs/paper.yaml). Values that cannot yet be verified
-from deposited raw predictions are intentionally excluded from hard acceptance
-tests and disclosed in the limitations document.
-
-## Full model and analysis pipeline
-
-The original first-party scripts are grouped under:
-
-```text
-pipeline/
-├── embeddings/   # ESM-C, PST and SaProt representations; UMAP inputs
-├── modeling/     # classifiers, balanced ensemble, robustness and inference
-├── analysis/     # GO/domain, LLPS, disorder, chromatin, motif and AA analyses
-├── figures/      # legacy publication plotting scripts
-└── database/     # RLBPPredDB annotation and runtime-table construction
-```
-
-[`pipeline/ORIGIN_MANIFEST.tsv`](pipeline/ORIGIN_MANIFEST.tsv) records the
-remote source path, release path, source SHA-256, portability status, and notes
-for all 44 scripts. Machine-specific absolute paths were replaced with
-arguments, environment variables, or repository-relative defaults without
-changing reported scientific thresholds or ensemble settings.
-
-Large pretrained weights, embeddings, protein structures, model checkpoints,
-and third-party database snapshots are not stored in Git. Their required
-provenance and the remaining environment gaps are documented before any claim
-of end-to-end reproduction. The downstream modeling environment is described
-in `environment-training.yml`; ESM-C, PST, and SaProt extraction environments
-must be isolated and pinned separately because their source trees, checkpoints,
-CUDA/PyG combinations, and in some cases Python namespaces differ.
-
-## Repository guide
-
-- [`docs/repository_map.md`](docs/repository_map.md) — where each artifact lives
-- [`docs/reproduce_figures.md`](docs/reproduce_figures.md) — per-panel commands,
-  inputs, outputs, and checks
-- [`docs/reproduce_model.md`](docs/reproduce_model.md) — training, inference,
-  resources, seeds, and environment boundaries
-- [`docs/data_sources.md`](docs/data_sources.md) — external data/model provenance
-- [`docs/known_limitations.md`](docs/known_limitations.md) — unresolved derivations
-  and manual/external panels
-- [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) — licensing boundaries
-
-## Citation
-
-If you use this release, cite the associated RLBPPred manuscript and the
-software metadata in [`CITATION.cff`](CITATION.cff). A DOI-backed archival
-record can be added after the repository is connected to an archival service;
-no DOI is claimed in this initial GitHub release.
-
-## License
-
-Original code and documentation in this repository are released under the
-[MIT License](LICENSE). External software, pretrained models, database records,
-published datasets, and generated derivatives remain subject to their own
-licenses and terms; see [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+Original code is [MIT licensed](LICENSE). See [CITATION.cff](CITATION.cff) for
+software metadata and cite the associated manuscript. Release tags and model
+assets are hosted on GitHub; no archival DOI is claimed. External datasets, models,
+software and experimental images retain their own terms; see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

@@ -1,0 +1,38 @@
+{
+  "source": "source-project/RLBP",
+  "output": "experiments/strict_saprot_mlp_reproduction_20261013",
+  "host": "WH-B6-9-S174-5880",
+  "python": "3.12.12 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 20:16:04) [GCC 11.2.0]",
+  "torch": "2.10.0+cu128",
+  "numpy": "1.26.4",
+  "sklearn": "1.8.0",
+  "gpu": "NVIDIA RTX 5880 Ada Generation",
+  "cuda": "12.8",
+  "hashes": {
+    "original_trainer": "73f572015a540128d5db808c4eb62dbefa460b84506349f4c87368e81ae9ea95",
+    "strict_metrics": "c46fb2acbd5e391028449d4a20e2de049505e8fdab32f19c585b9f05cd879d9f",
+    "human_old": "651c90eaa3c3b9bc869d4e1d26b528559736f88c8a0fd5599e02f72a28a4d7e9",
+    "mouse_old": "dcc736ed2c5281c5b9c0a065ef766fa9509cda4f0de9abe90a89898ff2ce369b",
+    "old_342": "6e61a4ac16a890ceb48bab46ea6a2af21b52e10c970af6e94fdd8370de456acc"
+  },
+  "note": "Original code fixes NumPy split/sampling only. This rerun additionally fixes PyTorch seed 42; original initialization and exact historical runtime are unavailable.",
+  "protocol": {
+    "seed": 42,
+    "n_rounds": 300,
+    "epochs": 50,
+    "batch_size": 64,
+    "hidden_dims": [
+      512,
+      256
+    ],
+    "dropout": 0.3,
+    "batch_norm": true,
+    "optimizer": "Adam",
+    "lr": 0.001,
+    "threshold": 0.5,
+    "candidate_threshold": 0.85,
+    "scaler_fit": "strict training only",
+    "split": "original sorted embeddings and train_val_split",
+    "selection": "none; fixed ensemble; no early stopping"
+  }
+}
