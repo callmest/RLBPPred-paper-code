@@ -1,7 +1,12 @@
-# RLBPPred reproducibility package
+# RLBPPred paper reproduction code
 
-Version **1.1.0**: code and frozen results for the current
+**RLBPPred-paper-code v1.1.1**: code and frozen results for the current
 **strict401 / manuscript v12** profile.
+
+The main prediction software is [RLBPPred](https://github.com/callmest/RLBPPred).
+This repository was renamed from `callmest/RLBPPred` to
+`callmest/RLBPPred-paper-code`; the old address now belongs to the prediction
+software. Use the explicit paper-code URL for paper materials and historical tags.
 
 RLBPPred uses frozen SaProt-650M-AF2 representations and a 300-member balanced
 MLP ensemble. The strict benchmark contains 376 positives and 9,109 negatives.
@@ -14,11 +19,11 @@ Classification summaries retain the separate threshold **0.5**.
 
 ## Two codebases
 
-The [callmest/RLBPPred repository](https://github.com/callmest/RLBPPred)
+The [RLBPPred-paper-code repository](https://github.com/callmest/RLBPPred-paper-code)
 retains model training, downstream analyses, frozen scientific evidence and
 manuscript-figure reproduction. The independent
-[callmest/RLBPPred-inference repository](https://github.com/callmest/RLBPPred-inference)
-provides the versioned `rlbppred` command (release **v0.2.0**): structure
+[RLBPPred software repository](https://github.com/callmest/RLBPPred)
+provides the versioned `rlbppred` command (release **v0.2.1**): structure
 acquisition, SaProt feature extraction and pretrained prediction, as well as
 prediction from matching raw, 1,280-dimensional embeddings. It does not depend
 on this repository's directory layout or include training and plotting
@@ -29,7 +34,7 @@ The existing `pipeline/modeling/strict_runtime.py predict` entrypoint remains
 available for compatibility and numerical regression checks. The new inference
 interface uses a safe `safetensors` model bundle converted from the
 SHA256-verified frozen checkpoint. Weights are separate assets in the
-[inference v0.2.0 Release](https://github.com/callmest/RLBPPred-inference/releases/tag/v0.2.0),
+[model-asset v0.2.0 Release](https://github.com/callmest/RLBPPred/releases/tag/v0.2.0),
 not Git or the installation wheel.
 The SaProt encoder is obtained directly from its version-pinned official
 source. No PyPI publication or Zenodo archive is required or claimed. See
@@ -38,19 +43,21 @@ source. No PyPI publication or Zenodo archive is required or claimed. See
 For pretrained prediction instead of paper reproduction:
 
 ```bash
-python -m pip install "rlbppred[fasta] @ git+https://github.com/callmest/RLBPPred-inference.git@v0.2.0"
+python -m pip install "rlbppred[fasta] @ git+https://github.com/callmest/RLBPPred.git@v0.2.1"
 rlbppred setup
 rlbppred predict-fasta --fasta proteins.fasta --output-dir predictions
 ```
 
-Use the inference repository's [v0.2.0 instructions](https://github.com/callmest/RLBPPred-inference/tree/v0.2.0)
+Use the software repository's [v0.2.1 instructions](https://github.com/callmest/RLBPPred/tree/v0.2.1)
 for the supported platforms, exact structure requirements and offline operation.
 
 ## Quick start: validate and redraw frozen results
 
-Use this repository's **v1.1.0** checkout, which contains
+Use this repository's **v1.1.1** checkout, which contains
 `data/panels/current/` and `data/frozen_model/` with the documented hashes.
 The historical v1.0.0 profile is not interchangeable with this strict401 release.
+Version v1.1.1 updates repository names and links without changing the frozen
+scientific inputs, model weights or analysis results of v1.1.0.
 
 ```bash
 # Start in the repository root.
@@ -86,7 +93,7 @@ results are recorded in [validation status](docs/validation_status.md).
 | Level | Packaged material | Scope |
 |---|---|---|
 | Frozen-result replay | Current panel CSVs, complete human/mouse scores, 401 candidates, validation predictions, source hashes | Validate numbers and regenerate quantitative plots without weights or a GPU |
-| Pretrained inference (standard users) | Independent v0.2.0 inference package and safe Release bundle with all 300 members/scalers | Download with `rlbppred setup --components model`, then score matching embeddings or use the documented FASTA workflow; no original pickle checkpoint or fitting required |
+| Pretrained inference (standard users) | RLBPPred v0.2.1 software and the unchanged v0.2.0 safe model bundle with all 300 members/scalers | Download with `rlbppred setup --components model`, then score matching embeddings or use the documented FASTA workflow; no original pickle checkpoint or fitting required |
 | Training/analysis reconstruction | Exact strict split and 300 sampling rounds, training protocol, parameterized analysis code | Requires external large assets and pinned environments; not claimed as an independently completed end-to-end rerun |
 
 The original `strict_ensemble.pt` interface remains a maintainer-only

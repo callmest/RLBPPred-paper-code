@@ -1,12 +1,32 @@
-# Version 1.1.0 validation: 2026-11-09
+# Version 1.1.1 validation: 2026-11-09
 
-Maintainer: `callmest`. Training/reproducibility version **1.1.0** is maintained
-in `callmest/RLBPPred`; the independent installation and pretrained-prediction
-package is version **0.2.0** in `callmest/RLBPPred-inference`. The strict MLP
-assets are distributed with the inference v0.2.0 GitHub Release, while the fixed
+Maintainer: `callmest`. Training/reproducibility version **1.1.1** is maintained
+in `callmest/RLBPPred-paper-code`; the main prediction software is
+**RLBPPred v0.2.1** in `callmest/RLBPPred`. The unchanged strict MLP
+assets remain in the software repository's v0.2.0 GitHub Release, while the fixed
 SaProt checkpoint is downloaded from its official upstream source. Local
 software acceptance and remote publication/CI status are separate checks.
 See [codebase roles and asset versions](codebase_split.md).
+
+This patch updates project names, repository URLs and software versions only.
+It does not change scientific data, model hashes, frozen predictions or
+candidate lists. The dated acceptance evidence below was recorded for the same
+scientific profile before the rename; the rename checks are recorded separately.
+
+## Repository rename checks
+
+For v1.1.1, the complete offline suite was rerun: **53 tests and 13 subtests
+passed**, with no skipped tests. Frozen scientific/provenance validation again
+passed **210/210** checks. `make validate` passed CFF schema, metadata and
+dependency declarations, all 60 Python syntax checks and the large-file guard;
+the Git whitespace check passed. No scientific panel was redrawn.
+
+Current links distinguish paper-code v1.1.1 from RLBPPred software v0.2.1 and
+the unchanged model-asset release v0.2.0. All seven archived documents received
+only a repository-name warning; their original bodies were preserved. The
+existing CI run link retains its original repository identity under the new
+paper-code name. This local rename acceptance does not claim that a new remote
+CI run has already executed for the patch.
 
 ## Checks executed on 9 November
 
@@ -54,7 +74,7 @@ offline evidence checks. Remote GitHub Actions execution and publication are
 not claimed by local tests.
 
 The separate remote run for strict401 commit `75d1160` subsequently passed:
-[GitHub Actions validation, 9 November 2026](https://github.com/callmest/RLBPPred/actions/runs/42572774723).
+[GitHub Actions validation, 9 November 2026](https://github.com/callmest/RLBPPred-paper-code/actions/runs/42572774723).
 It included metadata checks, frozen-data validation, offline regression tests
 and all registered quantitative panel replays. This is a software/replay check,
 not a new training run or a repeat of all biological analyses from raw assets.

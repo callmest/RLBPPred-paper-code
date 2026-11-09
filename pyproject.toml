@@ -3,9 +3,9 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "rlbppred-reproducibility"
-version = "1.1.0"
-description = "Reproducible analysis and figure workflows for RLBPPred"
+name = "rlbppred-paper-code"
+version = "1.1.1"
+description = "Training, analysis and paper-figure reproduction for RLBPPred"
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
 license = { file = "LICENSE" }
@@ -35,7 +35,7 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Repository = "https://github.com/callmest/RLBPPred"
+Repository = "https://github.com/callmest/RLBPPred-paper-code"
 
 [project.optional-dependencies]
 dev = [

@@ -1,20 +1,26 @@
 # Training and reproducibility versus pretrained prediction
 
 Two repositories provide different workflows under the `callmest` account.
-The existing [RLBPPred repository](https://github.com/callmest/RLBPPred)
+The [RLBPPred-paper-code repository](https://github.com/callmest/RLBPPred-paper-code)
 retains training and paper reproduction. The independent
-[RLBPPred-inference repository](https://github.com/callmest/RLBPPred-inference)
+[RLBPPred software repository](https://github.com/callmest/RLBPPred)
 provides the installable Python package and command, both named `rlbppred`, at
-release **v0.2.0**. Training and paper reproduction use this repository's
-**v1.1.0** strict401 profile. These are separate software versions, not different
+release **v0.2.1**. Training and paper reproduction use this repository's
+**v1.1.1** strict401 profile. These are separate software versions, not different
 scientific models.
+
+The paper repository was previously named `callmest/RLBPPred`; that address now
+belongs to the main prediction software, formerly `callmest/RLBPPred-inference`.
+Old paper-source links must use `callmest/RLBPPred-paper-code`, not rely on a
+redirect from the reused software name. Scientific data and model hashes are
+unchanged by the rename.
 
 ## Codebase responsibilities
 
 | Repository | Responsibility |
 |---|---|
-| `callmest/RLBPPred` | Strict training reconstruction, frozen split and sampling records, benchmark and candidate validation, downstream analyses, database-export helpers and quantitative figure reproduction |
-| `callmest/RLBPPred-inference` | Installation, structure acquisition and validation, Foldseek AA+3Di token generation, fixed SaProt feature extraction, safe pretrained-model loading and prediction |
+| `callmest/RLBPPred-paper-code` | Strict training reconstruction, frozen split and sampling records, benchmark and candidate validation, downstream analyses, database-export helpers and quantitative figure reproduction |
+| `callmest/RLBPPred` | Installation, structure acquisition and validation, Foldseek AA+3Di token generation, fixed SaProt feature extraction, safe pretrained-model loading and prediction |
 
 Training and paper-reproduction commands continue to run from this repository:
 
@@ -36,17 +42,18 @@ deployment project.
 Install the fixed inference release and retrieve its verified assets:
 
 ```bash
-python -m pip install "rlbppred[fasta] @ git+https://github.com/callmest/RLBPPred-inference.git@v0.2.0"
+python -m pip install "rlbppred[fasta] @ git+https://github.com/callmest/RLBPPred.git@v0.2.1"
 rlbppred setup
 rlbppred predict-fasta --fasta proteins.fasta --output-dir predictions
 ```
 
-For development with both checkouts side by side, `python -m pip install
-../RLBPPred-inference` also installs the package. Neither method requires a
+For development with checkouts named `RLBPPred-paper-code` and `RLBPPred` side
+by side, `python -m pip install ../RLBPPred` from the paper-code checkout also
+installs the software package. Neither method requires a
 PyPI release. Once installed, prediction runs independently of the training
 checkout; it must not locate code through a sibling-directory import.
 
-Use the inference repository's [v0.2.0 README](https://github.com/callmest/RLBPPred-inference/tree/v0.2.0)
+Use the software repository's [v0.2.1 README](https://github.com/callmest/RLBPPred/tree/v0.2.1)
 for the accepted FASTA-to-prediction
 commands, required optional dependencies and recorded acceptance limits.
 Ordinary FASTA is not passed directly to the MLP: sequence-matched structures,
@@ -75,11 +82,13 @@ bc110567bc75511c7f46eb3e7d109fd6e81051baad471e22c5306ed71653cd52
 
 The project's strict MLP bundle (`model.json` and `model.safetensors`) is supplied
 as separate assets in the
-[inference v0.2.0 Release](https://github.com/callmest/RLBPPred-inference/releases/tag/v0.2.0).
+[model-asset v0.2.0 Release](https://github.com/callmest/RLBPPred/releases/tag/v0.2.0).
+Software v0.2.1 uses this unchanged model release; the rename does not introduce
+another weight file or require another large upload.
 The fixed download URLs are:
 
-- [model.json](https://github.com/callmest/RLBPPred-inference/releases/download/v0.2.0/model.json)
-- [model.safetensors](https://github.com/callmest/RLBPPred-inference/releases/download/v0.2.0/model.safetensors)
+- [model.json](https://github.com/callmest/RLBPPred/releases/download/v0.2.0/model.json)
+- [model.safetensors](https://github.com/callmest/RLBPPred/releases/download/v0.2.0/model.safetensors)
 
 Use only the release filenames and checksums recorded there and in the
 inference package's pinned asset manifest. An absent release asset is

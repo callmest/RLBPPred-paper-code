@@ -46,11 +46,11 @@ inputs must not be assigned zero. Mouse scores cover 76 significant positives,
 ## 2. Pretrained inference: recommended safe bundle
 
 For normal prediction, use the independent
-[RLBPPred-inference v0.2.0 package](https://github.com/callmest/RLBPPred-inference/tree/v0.2.0)
-and its [fixed GitHub Release assets](https://github.com/callmest/RLBPPred-inference/releases/tag/v0.2.0):
+[RLBPPred v0.2.1 software](https://github.com/callmest/RLBPPred/tree/v0.2.1)
+and its unchanged [v0.2.0 model assets](https://github.com/callmest/RLBPPred/releases/tag/v0.2.0):
 
 ```bash
-python -m pip install "rlbppred @ git+https://github.com/callmest/RLBPPred-inference.git@v0.2.0"
+python -m pip install "rlbppred @ git+https://github.com/callmest/RLBPPred.git@v0.2.1"
 rlbppred setup --components model
 rlbppred predict --embeddings features.npz --output predictions.csv
 ```
@@ -65,7 +65,7 @@ hashes. The output must be a new file. No training occurs.
 Normal users do **not** need the original `strict_ensemble.pt`, a separate
 scaler file or this training checkout. For FASTA input, install the `fasta` extra
 and follow the inference repository's versioned
-[FASTA and offline instructions](https://github.com/callmest/RLBPPred-inference/blob/v0.2.0/README.md).
+[FASTA and offline instructions](https://github.com/callmest/RLBPPred/blob/v0.2.1/README.md).
 The safe bundle and that workflow preserve the existing strict model rather
 than substituting a different trained model.
 

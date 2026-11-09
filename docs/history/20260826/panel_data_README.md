@@ -1,3 +1,10 @@
+Repository rename notice (2026-11-09): this is archived documentation.
+The former paper repository is now
+[RLBPPred-paper-code](https://github.com/callmest/RLBPPred-paper-code).
+The old `callmest/RLBPPred` address now belongs to the main prediction software;
+use the paper-code entry point for historical paper links below. The archived
+content is otherwise preserved.
+
 # Panel-level source data
 
 The CSV files in this directory are the canonical inputs for the fast figure
