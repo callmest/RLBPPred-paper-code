@@ -43,9 +43,40 @@ lists contain 1,879 potential positives and 5,649 untrained proteins; unscored
 inputs must not be assigned zero. Mouse scores cover 76 significant positives,
 284 potential positives and 16,642 negatives (17,002 total).
 
-## 2. Inference using the trusted frozen checkpoint
+## 2. Pretrained inference: recommended safe bundle
 
-Required external assets:
+For normal prediction, use the independent
+[RLBPPred-inference v0.2.0 package](https://github.com/callmest/RLBPPred-inference/tree/v0.2.0)
+and its [fixed GitHub Release assets](https://github.com/callmest/RLBPPred-inference/releases/tag/v0.2.0):
+
+```bash
+python -m pip install "rlbppred @ git+https://github.com/callmest/RLBPPred-inference.git@v0.2.0"
+rlbppred setup --components model
+rlbppred predict --embeddings features.npz --output predictions.csv
+```
+
+`features.npz` must contain unique nonempty `protein_id` strings and a finite,
+raw, unstandardized float32 `X` matrix of shape N x 1,280 from matching
+SaProt-650M-AF2 global-mean features. Do not standardize these inputs again.
+The safe `model.safetensors` bundle contains all 300 trained MLP members and
+their complete frozen scaler arrays; setup verifies the pinned file sizes and
+hashes. The output must be a new file. No training occurs.
+
+Normal users do **not** need the original `strict_ensemble.pt`, a separate
+scaler file or this training checkout. For FASTA input, install the `fasta` extra
+and follow the inference repository's versioned
+[FASTA and offline instructions](https://github.com/callmest/RLBPPred-inference/blob/v0.2.0/README.md).
+The safe bundle and that workflow preserve the existing strict model rather
+than substituting a different trained model.
+
+### Maintainer compatibility and regression interface only
+
+The following legacy-checkpoint interface is retained for maintainers comparing
+historical runs or checking numerical compatibility. It is not the recommended
+user installation route, and the original pickle-capable `.pt` is not an
+additional public download requirement.
+
+Maintainer-only external assets:
 
 - The approximately 906 MiB `strict_ensemble.pt`, with the exact SHA256 in
   `data/frozen_model/manifest.json`.
@@ -75,10 +106,14 @@ Output scores retain full float precision; model/output source files are not
 overwritten. A separately reconstructed trusted checkpoint requires its own
 explicit `--model-sha256`.
 
-The checkpoint and embeddings are not bundled and no public download endpoint
-is asserted. Local repository QA did not execute the full checkpoint forward
-pass. Frozen cross-machine candidate comparisons are available in
-`candidates_401.csv` (`probability` versus `probability_L40S`).
+The original `.pt` checkpoint and historical full-proteome embeddings are not
+bundled, and no public endpoint for those original files is asserted. This does
+not limit availability of the complete safe pretrained model linked above.
+The October repository-only QA did not execute this legacy checkpoint's forward
+pass; the inference package separately records actual-weight and two-protein
+FASTA regression. Packaging validation did not rerun all 16,969 human and
+17,002 mouse predictions. Frozen cross-machine candidate comparisons remain
+available in `candidates_401.csv` (`probability` versus `probability_L40S`).
 
 ## 3. Optional training reconstruction
 

@@ -14,8 +14,8 @@ authors:
 repository-code: "https://github.com/callmest/RLBPPred"
 url: "https://github.com/callmest/RLBPPred"
 license: MIT
-version: "1.0.0"
-date-released: "2026-08-25"
+version: "1.1.0"
+date-released: "2026-11-09"
 abstract: >-
   Code, environment specifications, and workflow documentation for reproducing
   the computational analyses and manuscript figures associated with RLBPPred.

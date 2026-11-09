@@ -1,11 +1,11 @@
-# Release-preparation validation: 2026-11-09
+# Version 1.1.0 validation: 2026-11-09
 
-Maintainer: `callmest`. The training/reproducibility release target remains
-`callmest/RLBPPred`; the independent installation and pretrained-prediction
-target is `callmest/RLBPPred-inference`. The strict MLP assets are assigned to
-the inference repository's GitHub Releases, while the fixed SaProt checkpoint
-is downloaded from its official upstream source. This record does not assert
-that unpublished repositories, release tags or assets are already online.
+Maintainer: `callmest`. Training/reproducibility version **1.1.0** is maintained
+in `callmest/RLBPPred`; the independent installation and pretrained-prediction
+package is version **0.2.0** in `callmest/RLBPPred-inference`. The strict MLP
+assets are distributed with the inference v0.2.0 GitHub Release, while the fixed
+SaProt checkpoint is downloaded from its official upstream source. Local
+software acceptance and remote publication/CI status are separate checks.
 See [codebase roles and asset versions](codebase_split.md).
 
 ## Checks executed on 9 November
@@ -52,6 +52,12 @@ database or old analysis result was overwritten. The prediction package's
 real-weight and FASTA acceptance records are separate from this repository's
 offline evidence checks. Remote GitHub Actions execution and publication are
 not claimed by local tests.
+
+The separate remote run for strict401 commit `75d1160` subsequently passed:
+[GitHub Actions validation, 9 November 2026](https://github.com/callmest/RLBPPred/actions/runs/42572774723).
+It included metadata checks, frozen-data validation, offline regression tests
+and all registered quantitative panel replays. This is a software/replay check,
+not a new training run or a repeat of all biological analyses from raw assets.
 
 # Historical repair validation: 2026-10-28
 

@@ -4,10 +4,10 @@ Two repositories provide different workflows under the `callmest` account.
 The existing [RLBPPred repository](https://github.com/callmest/RLBPPred)
 retains training and paper reproduction. The independent
 [RLBPPred-inference repository](https://github.com/callmest/RLBPPred-inference)
-is the publication target for the installable Python package and command, both
-named `rlbppred`. This document describes the release arrangement, not a claim
-that an unpublished tag or asset is already available. Check the destination's
-release page before using the remote-install and download commands.
+provides the installable Python package and command, both named `rlbppred`, at
+release **v0.2.0**. Training and paper reproduction use this repository's
+**v1.1.0** strict401 profile. These are separate software versions, not different
+scientific models.
 
 ## Codebase responsibilities
 
@@ -33,15 +33,12 @@ deployment project.
 
 ## Installation and prediction
 
-When the inference repository's release is available, install its checked-out
-tag locally:
+Install the fixed inference release and retrieve its verified assets:
 
 ```bash
-git clone https://github.com/callmest/RLBPPred-inference.git
-cd RLBPPred-inference
-# Check out the release tag documented by that repository, then:
-python -m pip install .
-rlbppred --help
+python -m pip install "rlbppred[fasta] @ git+https://github.com/callmest/RLBPPred-inference.git@v0.2.0"
+rlbppred setup
+rlbppred predict-fasta --fasta proteins.fasta --output-dir predictions
 ```
 
 For development with both checkouts side by side, `python -m pip install
@@ -49,7 +46,8 @@ For development with both checkouts side by side, `python -m pip install
 PyPI release. Once installed, prediction runs independently of the training
 checkout; it must not locate code through a sibling-directory import.
 
-Use the inference repository's README for the accepted FASTA-to-prediction
+Use the inference repository's [v0.2.0 README](https://github.com/callmest/RLBPPred-inference/tree/v0.2.0)
+for the accepted FASTA-to-prediction
 commands, required optional dependencies and recorded acceptance limits.
 Ordinary FASTA is not passed directly to the MLP: sequence-matched structures,
 Foldseek AA+3Di tokens and the fixed SaProt encoder are required first.
@@ -75,11 +73,16 @@ Expected size: 2,606,464,143 bytes. Expected SHA256:
 bc110567bc75511c7f46eb3e7d109fd6e81051baad471e22c5306ed71653cd52
 ```
 
-The project's strict MLP bundle (`model.json` and `model.safetensors`) will be
-supplied as separate assets on the
-[inference repository's GitHub Releases page](https://github.com/callmest/RLBPPred-inference/releases).
-Use only the release tag, filenames and download checksums recorded there and
-in the inference package's pinned asset manifest. An absent release asset is
+The project's strict MLP bundle (`model.json` and `model.safetensors`) is supplied
+as separate assets in the
+[inference v0.2.0 Release](https://github.com/callmest/RLBPPred-inference/releases/tag/v0.2.0).
+The fixed download URLs are:
+
+- [model.json](https://github.com/callmest/RLBPPred-inference/releases/download/v0.2.0/model.json)
+- [model.safetensors](https://github.com/callmest/RLBPPred-inference/releases/download/v0.2.0/model.safetensors)
+
+Use only the release filenames and checksums recorded there and in the
+inference package's pinned asset manifest. An absent release asset is
 not replaced by an unverified mirror. Large weights are excluded from Git and
 the code wheel. No Zenodo upload, archival DOI or PyPI publication is required
 by this distribution arrangement. Third-party encoder and structure terms
