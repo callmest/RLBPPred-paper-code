@@ -6,7 +6,7 @@ retains training and paper reproduction. The independent
 [RLBPPred software repository](https://github.com/callmest/RLBPPred)
 provides the installable Python package and command, both named `rlbppred`, at
 release **v0.2.1**. Training and paper reproduction use this repository's
-**v1.1.1** strict401 profile. These are separate software versions, not different
+**v1.1.2** strict401 profile. These are separate software versions, not different
 scientific models.
 
 The paper repository was previously named `callmest/RLBPPred`; that address now

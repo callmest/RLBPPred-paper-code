@@ -14,7 +14,8 @@ No release DOI, source accession or database version has been invented.
 | Frozen predictions | data/frozen_model/ | Human 16,969; mouse 17,002; held-out 1,896; complete scores with hashes |
 | 401 candidate IDs/scores | data/frozen_model/candidates_401.csv | Scored untrained human pool, >=0.98; separate cross-machine scores retained |
 | STREME output | data/frozen_analysis/streme401/ | Completed 401-vs-9,109 run, path-sanitized text/XML; original and distributed hashes recorded |
-| GO test family | data/panels/current/SupplementaryFigure8_all_GO.csv | All 3,082 eligible tests, 88 significant; not only selected display terms |
+| GO test family | data/panels/current/SupplementaryFigure7_all_GO.csv | All 3,082 eligible tests, 88 significant; not only selected display terms |
+| Database completion | data/database_completion/human_additional_predictions.csv | 3,106 disjoint human scores from the same fixed strict model; hashed separately from the original frozen analysis |
 | Database-query evidence | data/panels/current/Figure6_query.csv and Figure6_metadata.json | Six records, full scores, 14-field runtime coverage and source hashes |
 
 The authoritative workbook is sourcedata_v3.xlsx, SHA256
@@ -67,11 +68,19 @@ ancestor propagation), pool count >=5 and within-aspect BH correction.
 ## Database distinction
 
 The database contains 37,077 annotation records: 20,075 human and 17,002 mouse.
-There are 33,971 current strict scores; 3,106 human records lack scores.
+All 37,077 current records have strict-model scores. The 3,106 completed human
+scores extend database coverage without changing the original 16,969-human
+and 17,002-mouse frozen analysis files or the 401 discovery candidates.
+The 1,344 human records >=0.98 across all database evidence groups are not
+interchangeable with the 401 candidates in the original discovery pool.
 This annotation universe is not identical to the 20,435-protein historical
 exclusion universe. Do not treat these denominators as interchangeable.
 Runtime JSON/CSV has 14 fields; the construction intermediate additionally
 contains sequence. Only UI display rounds scores to six decimals.
+The six-record Figure 6 evidence is the first page of the default unfiltered
+view, not a topoisomerase query or candidate-only list. Its `evidence_group`
+field records membership in the original frozen analysis; `not_scored` means
+absent from those original score files, not a currently missing confidence.
 
 ## Before public archival
 

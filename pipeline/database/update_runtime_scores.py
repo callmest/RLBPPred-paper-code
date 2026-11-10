@@ -42,6 +42,14 @@ def read_scores(path: Path) -> dict[str, float]:
     return result
 
 
+def combine_scores(primary, supplement):
+    """Extend a frozen score map without replacing any original prediction."""
+    overlap = set(primary) & set(supplement)
+    if overlap:
+        raise ValueError(f'Database supplement overlaps {len(overlap)} frozen prediction IDs.')
+    return {**primary, **supplement}
+
+
 def merge_scores(records, scores):
     seen = set()
     updated = []
@@ -63,13 +71,16 @@ def merge_scores(records, scores):
         extra = set(species_scores) - {uid for sp, uid in seen if sp == species}
         if extra:
             raise ValueError(f'{len(extra)} {species} prediction IDs absent from annotation snapshot.')
-    return updated, {key: dict(value) for key, value in coverage.items()}
+    return updated, {key: {name: value[name] for name in ('records', 'scored', 'unscored')}
+                     for key, value in coverage.items()}
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--annotations-json', required=True, type=Path)
     parser.add_argument('--human-predictions', required=True, type=Path)
+    parser.add_argument('--human-supplement', type=Path,
+                        help='Optional disjoint strict-model database-completion CSV; never overwrites frozen scores.')
     parser.add_argument('--mouse-predictions', required=True, type=Path)
     parser.add_argument('--output-dir', required=True, type=Path)
     args = parser.parse_args(argv)
@@ -77,6 +88,8 @@ def main(argv=None):
         raise FileExistsError('Output directory must be new or empty.')
     records = json.loads(args.annotations_json.read_text(encoding='utf-8'))
     scores = {'Human': read_scores(args.human_predictions), 'Mouse': read_scores(args.mouse_predictions)}
+    if args.human_supplement:
+        scores['Human'] = combine_scores(scores['Human'], read_scores(args.human_supplement))
     updated, coverage = merge_scores(records, scores)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     json_path = args.output_dir / 'rlbp_annotations.json'
@@ -97,11 +110,15 @@ def main(argv=None):
             for role, path in [('annotations', args.annotations_json),
                                ('human_scores', args.human_predictions),
                                ('mouse_scores', args.mouse_predictions)]
+                              + ([('human_database_supplement', args.human_supplement)]
+                                 if args.human_supplement else [])
         ],
         'outputs': [{'file': path.name, 'sha256': digest(path)} for path in (json_path, csv_path)],
         'missing_scores': 'JSON null; CSV blank; never zero or historical scores',
         'precision': 'full source float precision; six-decimal display belongs to the UI',
         'annotation_fields_and_record_order_preserved': True,
+        'original_frozen_scores_preserved': True,
+        'discovery_candidates_redefined': False,
     }
     (args.output_dir / 'build_manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     print(json.dumps({'records': len(updated), 'coverage': coverage}, indent=2))

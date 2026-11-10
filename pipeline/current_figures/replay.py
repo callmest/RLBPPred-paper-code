@@ -20,6 +20,7 @@ import numpy as np
 import pandas as pd
 from pipeline.analysis.current_frozen_analysis import motif_composition
 from scripts.reproduce_figures_legacy import plot_upset
+from pipeline.current_figures.score_distributions import distribution_panel
 
 ROOT=Path(__file__).resolve().parents[2]
 GROUPS=['Novel predicted RLBPs','Known RLBPs','Non-RLBPs']
@@ -151,7 +152,7 @@ def umap(d,rep,subset):
     ax.set(xlabel='UMAP 1',ylabel='UMAP 2');ax.legend(markerscale=3,fontsize=6);return fig
 
 def heatmap(d,metric):
-    df=load(d,'SupplementaryFigure4');rows=list(dict.fromkeys(df.Classifier));table=df.pivot(index='Classifier',columns='Representation',values=metric).reindex(index=rows,columns=REPS)
+    df=load(d,'SupplementaryTable2');rows=list(dict.fromkeys(df.Classifier));table=df.pivot(index='Classifier',columns='Representation',values=metric).reindex(index=rows,columns=REPS)
     fig,ax=axis(metric.replace('F1','F1 score'),6.5,5.8);a=table.to_numpy(float);im=ax.imshow(a,cmap='Blues',aspect='auto',vmin=np.nanmin(a),vmax=np.nanmax(a))
     for i,j in np.ndindex(a.shape):
         ax.text(j,i,f'{a[i,j]:.3f}',ha='center',va='center',fontsize=6,color='white' if a[i,j]>(np.nanmin(a)+np.nanmax(a))/2 else '#222')
@@ -159,7 +160,7 @@ def heatmap(d,metric):
     ax.set_xticks(range(6),REPS,rotation=35,ha='right',fontsize=7);ax.set_yticks(range(len(rows)),rows,fontsize=7);fig.colorbar(im,ax=ax,shrink=.6);return fig
 
 def robustness(d,part):
-    df=load(d,{'a':'SupplementaryFigure5a','b':'SupplementaryFigure5b','c':'SupplementaryFigure5cd','d':'SupplementaryFigure5cd'}[part]);fig,ax=axis('Independent sampling-configuration analysis',5.6,4.4)
+    df=load(d,{'a':'SupplementaryFigure4a','b':'SupplementaryFigure4b','c':'SupplementaryFigure4cd','d':'SupplementaryFigure4cd'}[part]);fig,ax=axis('Independent sampling-configuration analysis',5.6,4.4)
     if part in 'ab':
         key='neg_ratio' if part=='a' else 'n_rounds'
         for metric,color in [('auroc','#4E79A7'),('auprc','#E15759')]:ax.plot(df[key],df[metric],marker='o',color=color,label=metric.upper())
@@ -170,13 +171,13 @@ def robustness(d,part):
     return fig
 
 def confusion(d):
-    df=load(d,'SupplementaryFigure6a');labels=['Non-RLBP','RLBP'];counts=df.pivot(index='true_label',columns='predicted_label',values='count').reindex(index=labels,columns=labels);perc=df.pivot(index='true_label',columns='predicted_label',values='row_percentage').reindex(index=labels,columns=labels)
+    df=load(d,'SupplementaryFigure5a');labels=['Non-RLBP','RLBP'];counts=df.pivot(index='true_label',columns='predicted_label',values='count').reindex(index=labels,columns=labels);perc=df.pivot(index='true_label',columns='predicted_label',values='row_percentage').reindex(index=labels,columns=labels)
     fig,ax=axis('Validation calls at probability ≥ 0.5',4.5,4.2);ax.imshow(perc,cmap='Blues',vmin=0,vmax=100)
     for i,j in np.ndindex((2,2)):ax.text(j,i,f'{int(counts.iloc[i,j]):,}\n({perc.iloc[i,j]:.2f}%)',ha='center',va='center',color='white' if perc.iloc[i,j]>50 else '#222')
     ax.set_xticks([0,1],labels);ax.set_yticks([0,1],labels);ax.set(xlabel='Predicted class',ylabel='True class');return fig
 
 def threshold(d):
-    df=load(d,'SupplementaryFigure6b')
+    df=load(d,'SupplementaryFigure5b')
     if not df.heldout_negative_n.eq(1821).all():raise ValueError('FPR denominator must be held-out1,821 negatives')
     chosen=df.loc[df.threshold.eq(.98)]
     if len(chosen)!=1:raise ValueError('Expected one frozen0.98 row')
@@ -186,7 +187,7 @@ def threshold(d):
     ax.text(.98,.97,f'0.98\nFPR {int(row.heldout_negative_pass_count)}/{int(row.heldout_negative_n):,} = {row.heldout_negative_fpr_percent:.4f}%\n{int(row.untrained_candidate_count)} candidates',transform=ax.get_xaxis_transform(),ha='right',va='top',fontsize=7);return fig
 
 def epifactors(d):
-    df=load(d,'SupplementaryFigure7b');categories=list(dict.fromkeys(df.Category));groups=list(dict.fromkeys(df.Group));fig,ax=axis('EpiFactors category enrichment',7.2,3.9)
+    df=load(d,'SupplementaryFigure6b');categories=list(dict.fromkeys(df.Category));groups=list(dict.fromkeys(df.Group));fig,ax=axis('EpiFactors category enrichment',7.2,3.9)
     for i,g in enumerate(groups):
         sub=df.loc[df.Group.eq(g)].set_index('Category').reindex(categories);points=ax.scatter(np.arange(len(categories)),[i]*len(categories),s=sub.Count*22,c=sub['-log10(P)'],cmap='YlOrRd',vmin=0,vmax=df['-log10(P)'].max(),edgecolors='#555')
         for x,count,odds in zip(range(len(categories)),sub.Count,sub['Odds ratio']):ax.text(x,i,f'{int(count)}\nOR {odds:.3g}',ha='center',va='center',fontsize=6)
@@ -196,13 +197,13 @@ def epifactors(d):
     return fig
 
 def motif_groups(d):
-    df=load(d,'SupplementaryFigure7c');fig,ax=axis('Motif sequence-composition groups',6.2,3.6);total='Total displayed motifs (E ≤ 1.2)';sig='Significant motifs (E < 0.05)'
+    df=load(d,'SupplementaryFigure6c');fig,ax=axis('Motif sequence-composition groups',6.2,3.6);total='Total displayed motifs (E ≤ 1.2)';sig='Significant motifs (E < 0.05)'
     ax.barh(df['Composition group'],df[total],color='#D6DADC',label='All displayed motifs');ax.barh(df['Composition group'],df[sig],color=[MOTIF_COLORS[g] for g in df['Composition group']],label='E < 0.05')
     for i,row in df.iterrows():ax.text(row[total]+.12,i,f'{int(row[sig])}/{int(row[total])}',va='center')
     ax.set_xlabel('Motif count (descriptive groups, not validated functions)');ax.margins(x=.18);ax.legend(fontsize=6);return fig
 
 def aa(d):
-    df=load(d,'SupplementaryFigure7d');order=list(dict.fromkeys(df['Amino acid']));angles=np.linspace(0,2*np.pi,20,endpoint=False);closed=np.r_[angles,angles[0]]
+    df=load(d,'SupplementaryFigure6d');order=list(dict.fromkeys(df['Amino acid']));angles=np.linspace(0,2*np.pi,20,endpoint=False);closed=np.r_[angles,angles[0]]
     fig,ax=plt.subplots(figsize=(6.5,6),subplot_kw={'projection':'polar'},layout='constrained')
     for g,color in zip(GROUPS,COLORS):
         sub=df.loc[df['Protein group'].eq(g)].set_index('Amino acid').reindex(order);vals=sub['Pooled percentage (%)'].to_numpy(float)
@@ -211,19 +212,22 @@ def aa(d):
     ax.set_xticks(angles,order);ax.set_title('Pooled amino-acid composition (%)',pad=24);ax.legend(loc='upper right',bbox_to_anchor=(1.25,-.03),fontsize=7);return fig
 
 def go(d,aspect):
-    df=load(d,'SupplementaryFigure8_all_GO');selected=df.plot_selected.astype(str).str.lower().isin(['true','1']);sub=df.loc[df.aspect.eq(aspect)&selected].sort_values(['q_bh','p_value','term_id'])
+    df=load(d,'SupplementaryFigure7_all_GO');selected=df.plot_selected.astype(str).str.lower().isin(['true','1']);sub=df.loc[df.aspect.eq(aspect)&selected].sort_values(['q_bh','p_value','term_id'])
     fig,ax=axis({'BP':'Biological process','CC':'Cellular component','MF':'Molecular function'}[aspect],7.2,4.7)
     ax.barh(sub.term_name,-np.log10(sub.q_bh),color=GO_COLORS[aspect]);ax.invert_yaxis();ax.tick_params(axis='y',labelsize=7);ax.set_xlabel('−log10(BH-adjusted P); 401 candidates vs 5,237 pool controls');return fig
 
 PLOTS={'Fig1a':corona,'Fig1b':venn,'Fig1d':benchmark_go,'Fig2c':auprc,
-       'Fig3a':lambda d:roc(d,'Figure3a'),'Fig3b':lambda d:roc(d,'Figure3b'),'Fig3c':lambda d:probability(d,'Figure3c','mean_probability'),'Fig3d':lambda d:probability(d,'Figure3d','mean_probability'),
+       'Fig3a':lambda d:roc(d,'Figure3a'),'Fig3b':lambda d:roc(d,'Figure3b'),'Fig3c':lambda d:distribution_panel(d,'Figure3c'),'Fig3d':lambda d:distribution_panel(d,'Figure3d'),
        'Fig5a':lambda d:grouped(d,'Figure5a','Category','Percentage (%)','EpiFactors functional categories'),'Fig5b':lambda d:grouped(d,'Figure5b','Database','Overlap (%)','Phase-separation database annotations'),'Fig5c':disorder,'Fig5d':motifs,
-       'SupFig1a':lambda d:plot_upset(load(d,'SupplementaryFigure1a'),'Protein ID',['Human Proteome','All Positive','GO-related','Domain-related','RloopBase'],'Negative-set construction categories'),
-       **{f'SupFig4{p}':(lambda d,m=m:heatmap(d,m)) for p,m in zip('abcde',['AUROC','F1','MCC','Precision','Recall'])},
-       **{f'SupFig5{p}':(lambda d,p=p:robustness(d,p)) for p in 'abcd'},'SupFig6a':confusion,'SupFig6b':threshold,
-       'SupFig6c':lambda d:probability(d,'SupplementaryFigure6c','percentage_positive'),'SupFig6d':lambda d:probability(d,'SupplementaryFigure6d','percentage_positive'),
-       'SupFig7a':lambda d:grouped(d,'SupplementaryFigure7a','Group','Percentage (%)','Overall EpiFactors annotation'),'SupFig7b':epifactors,'SupFig7c':motif_groups,'SupFig7d':aa,
-       **{f'SupFig8{p}':(lambda d,a=a:go(d,a)) for p,a in zip('abc',['BP','CC','MF'])}}
+       'SupFig1':lambda d:plot_upset(load(d,'SupplementaryFigure1a'),'Protein ID',['Human Proteome','All Positive','GO-related','Domain-related','RloopBase'],'Negative-set construction categories'),
+       **{f'SupFig4{p}':(lambda d,p=p:robustness(d,p)) for p in 'abcd'},'SupFig5a':confusion,'SupFig5b':threshold,
+       'SupFig5c':lambda d:probability(d,'SupplementaryFigure5c','percentage_positive'),'SupFig5d':lambda d:probability(d,'SupplementaryFigure5d','percentage_positive'),
+       'SupFig6a':lambda d:grouped(d,'SupplementaryFigure6a','Group','Percentage (%)','Overall EpiFactors annotation'),'SupFig6b':epifactors,'SupFig6c':motif_groups,'SupFig6d':aa,
+       **{f'SupFig7{p}':(lambda d,a=a:go(d,a)) for p,a in zip('abc',['BP','CC','MF'])}}
+# Optional diagnostics for the complete performance table are not SI figures and
+# are deliberately excluded from --all/current manuscript panel identities.
+OPTIONAL_PLOTS={f'SuppTable2_{metric}':(lambda d,m=metric:heatmap(d,m))
+                for metric in ['AUROC','F1','MCC','Precision','Recall']}
 for number,reps in [(2,['ESM-C 300M','ESM-C 600M','PST T33']),(3,['SaProt PDB','PST T33-SO','SaProt AF2'])]:
     for i,rep in enumerate(reps):
         for j,subset in enumerate(['full','sampled']):PLOTS[f'SupFig{number}{chr(97+2*i+j)}']=lambda d,r=rep,s=subset:umap(d,r,s)
@@ -244,11 +248,11 @@ def validate_output_dir(path, root=ROOT):
     return destination
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);choice=parser.add_mutually_exclusive_group(required=True);choice.add_argument('--all',action='store_true');choice.add_argument('--figure',help='Current panel, e.g. Fig5d or SupFig8a')
+    parser=argparse.ArgumentParser(description=__doc__);choice=parser.add_mutually_exclusive_group(required=True);choice.add_argument('--all',action='store_true');choice.add_argument('--figure',help='Current panel, e.g. Fig5d or SupFig7a; optional table diagnostic: SuppTable2_AUROC')
     parser.add_argument('--data-dir',type=Path,default=ROOT/'data/panels/current');parser.add_argument('--output-dir',type=Path,default=ROOT/'outputs/figures/current');parser.add_argument('--dpi',type=int,default=300);args=parser.parse_args()
     panels=sorted(PLOTS) if args.all else [args.figure]
-    invalid=[panel for panel in panels if panel not in PLOTS and panel not in MANUAL]
-    if invalid:parser.error(f'Unknown current panel {invalid[0]}; choices: '+', '.join(sorted(PLOTS)))
+    invalid=[panel for panel in panels if panel not in PLOTS and panel not in OPTIONAL_PLOTS and panel not in MANUAL]
+    if invalid:parser.error(f'Unknown current panel {invalid[0]}; choices: '+', '.join(sorted(PLOTS|OPTIONAL_PLOTS)))
     if args.dpi<=0:parser.error('--dpi must be positive')
     try:args.output_dir=validate_output_dir(args.output_dir)
     except ValueError as exc:parser.error(str(exc))
@@ -257,7 +261,7 @@ def main():
     report={'mode':'frozen quantitative panel replay','generated':[],'manual_panels_not_generated':MANUAL,'data_files':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(args.data_dir.glob('*.csv'))},'upstream_analysis_executed':False}
     for panel in panels:
         if panel in MANUAL:print(f'{panel}: manual asset, not generated ({MANUAL[panel]})');continue
-        fig=PLOTS[panel](args.data_dir)
+        fig=(PLOTS|OPTIONAL_PLOTS)[panel](args.data_dir)
         for ext in ['svg','pdf','png']:fig.savefig(args.output_dir/f'{panel}.{ext}',dpi=args.dpi,bbox_inches='tight',facecolor='white')
         plt.close(fig);report['generated'].append(panel);print(f'Generated {panel}')
     (args.output_dir/'replay_report.json').write_text(json.dumps(report,indent=2)+'\n')

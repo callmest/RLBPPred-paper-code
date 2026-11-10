@@ -1,6 +1,6 @@
 # RLBPPred paper reproduction code
 
-**RLBPPred-paper-code v1.1.1**: code and frozen results for the current
+**RLBPPred-paper-code v1.1.2**: code and frozen results for the current
 **strict401 / manuscript v12** profile.
 
 The main prediction software is [RLBPPred](https://github.com/callmest/RLBPPred).
@@ -53,11 +53,14 @@ for the supported platforms, exact structure requirements and offline operation.
 
 ## Quick start: validate and redraw frozen results
 
-Use this repository's **v1.1.1** checkout, which contains
+Use this repository's **v1.1.2** checkout, which contains
 `data/panels/current/` and `data/frozen_model/` with the documented hashes.
 The historical v1.0.0 profile is not interchangeable with this strict401 release.
-Version v1.1.1 updates repository names and links without changing the frozen
-scientific inputs, model weights or analysis results of v1.1.0.
+Version v1.1.2 synchronizes the current distribution curves, supplementary panel
+numbers and complete database evidence, preserving original frozen predictions
+and candidate membership. The preceding v1.1.1 release updated repository names
+and links without changing the frozen scientific inputs, model weights or
+analysis results of v1.1.0.
 
 ```bash
 # Start in the repository root.
@@ -132,8 +135,13 @@ The separate [RLBPPredDB repository](https://github.com/callmest/RLBPPredDB)
 contains the browser application and local deployment instructions. No public
 server is required: serve it on `127.0.0.1` using Python's HTTP server.
 
-Current database evidence covers 37,077 annotation records, with 33,971 strict
-scores and 3,106 unscored human records. Missing scores remain null/blank, not
+Current database evidence covers 37,077 strict-scored annotation records:
+20,075 human and 17,002 mouse, with no current missing scores. The 3,106 added
+human scores are a separate database-completion snapshot; the original frozen
+16,969-human/17,002-mouse analysis files and 401-candidate list are unchanged.
+There are 1,344 human database records at >=0.98 across all evidence groups;
+these are not the 401 candidates from the fixed 5,640-protein discovery pool.
+Missing-value handling remains null/blank if a future input has no score, never
 zero or historical scores. The browser has 14 fields; the construction
 intermediate has 15, including sequence. Scores retain full precision in data
 files and are displayed to six decimals. See [database reconstruction](docs/reproduce_model.md#database-exports).

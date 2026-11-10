@@ -1,5 +1,4 @@
-dataset,percentage_positive,sample_size
-sig_pos_ids,98.93617021276596,376
-potential_positive,71.90889370932754,1844
-untrained_proteome,37.783687943262414,5640
-neg_ids,5.423207816445274,9109
+Composition group,Significant motifs (E < 0.05),Total displayed motifs (E ≤ 1.2)
+Cys-containing,3,3
+Lys/Arg-rich,4,6
+Other sequences,0,2

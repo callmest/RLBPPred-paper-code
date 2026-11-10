@@ -1,4 +1,41 @@
-# Version 1.1.1 validation: 2026-11-09
+# Version 1.1.2 validation: 2026-11-10
+
+The current working profile replaces Figure 3c–d mean-bar replay with the
+manuscript's seven 20-bin PCHIP distributions, maps current supplementary
+figures to numbers 1–7, and keeps the complete performance metrics as
+Supplementary Table 2 rather than five current SI heatmaps. The default figure
+registry now contains 40 panels; optional performance-table heatmaps are
+explicitly outside the current figure registry.
+
+Database evidence uses the default unfiltered first-six-record view and the
+completed 37,077-score snapshot. A separate hashed 3,106-row human supplement
+extends database coverage without replacing any original frozen probability,
+model weight, split or 401-candidate membership. All publication claims and
+dated acceptance results below refer to their stated versions; this working
+synchronization is version 1.1.2. Local acceptance does not by itself assert
+remote publication or a completed remote CI run.
+
+Local acceptance for this synchronization used the reviewed source workbook
+SHA256 `438bead3a0a14ec21d9997c37c67d1f89d69b1860747f3d91f68c471b99ff36d`:
+
+| Check | Result |
+|---|---|
+| Complete offline regression suite | 59 tests and 13 subtests passed |
+| Current-profile validation with the actual source workbook | 231/231 passed |
+| Current quantitative replay | 40 panels exported as 500 dpi PNG, editable SVG and PDF |
+| Figure QA | All five contact sheets inspected; Figure 3c–d also inspected individually; 40 SVGs retain live text and 40 PDFs contain selectable text |
+| Optional table diagnostic | Supplementary Table 2 AUROC diagnostic exported separately; excluded from current SI figures and `--all` |
+| Database reconstruction | JSON and CSV exactly match the complete local snapshot, including record order and full-precision scores |
+| Frozen inputs | Original model provenance, human/mouse predictions, candidate membership and historical panel data preserved |
+
+The checks ran in an isolated copy of the same published base commit with the
+reviewed changes overlaid, because some original local files were temporarily
+cloud-evicted. This did not substitute different scientific inputs: frozen file
+checksums and the reviewed workbook identity were verified. No training,
+inference, STREME discovery, annotation retrieval or biological analysis was
+launched by this software/data synchronization.
+
+## Historical version 1.1.1 validation: 2026-11-09
 
 Maintainer: `callmest`. Training/reproducibility version **1.1.1** is maintained
 in `callmest/RLBPPred-paper-code`; the main prediction software is
@@ -121,7 +158,7 @@ No commit, push, public release or archival DOI was created.
 | Quantitative panel replay | 45 panels exported in PNG/SVG/PDF; contact sheets visually inspected |
 | Text editability | All 45 SVGs retain text and all 45 PDFs contain selectable text |
 | SupFig7b legend follow-up | Single panel re-exported and inspected after adding color/area explanations |
-| Database trial export | 37,077 records; 33,971 scored; 3,106 missing; all scores and non-score fields/order exactly match the current local snapshot |
+| Database trial export | 37,077 records; 33,971 scored; 3,106 missing; all scores and non-score fields/order exactly matched the then-current local snapshot (superseded by the separately versioned 10 November completion) |
 | CSV/JSON precision | Full-precision numeric round trip passed |
 | Protected documents/site files | 14 pre-recorded SHA256 values unchanged |
 | Historical panel data | 35 files unchanged from pre-repair backup |

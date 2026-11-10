@@ -70,7 +70,7 @@ class CurrentAnalysisTests(unittest.TestCase):
             self.assertIn('Historical 342-candidate workflow',result.stderr,script)
 
     def test_current_go_family(self):
-        report=verify_frozen_go(ROOT/'data/panels/current/SupplementaryFigure8_all_GO.csv')
+        report=verify_frozen_go(ROOT/'data/panels/current/SupplementaryFigure7_all_GO.csv')
         self.assertEqual((report['tested'],report['significant']),(3082,88))
         self.assertEqual(report['by_aspect']['BP'],{'tested':1908,'significant':33})
 
@@ -88,7 +88,7 @@ class CurrentAnalysisTests(unittest.TestCase):
         self.assertEqual(control['p_value'],1)
 
     def test_threshold_denominator_and_inclusive_call(self):
-        with (ROOT/'data/panels/current/SupplementaryFigure6b.csv').open() as f:rows=list(csv.DictReader(f))
+        with (ROOT/'data/panels/current/SupplementaryFigure5b.csv').open() as f:rows=list(csv.DictReader(f))
         selected=[r for r in rows if float(r['threshold'])==.98]
         self.assertEqual(len(selected),1)
         row=selected[0]
@@ -103,7 +103,7 @@ class CurrentAnalysisTests(unittest.TestCase):
         self.assertEqual(sum(r['group_label']=='Novel predicted RLBPs' for r in rows),401)
 
     def test_pooled_aa_counts(self):
-        with (ROOT/'data/panels/current/SupplementaryFigure7d.csv').open() as f:rows=list(csv.DictReader(f))
+        with (ROOT/'data/panels/current/SupplementaryFigure6d.csv').open() as f:rows=list(csv.DictReader(f))
         self.assertEqual(len(rows),60)
         expected={'Novel predicted RLBPs':(401,240972),'Known RLBPs':(376,234811),'Non-RLBPs':(9109,4356393)}
         for group,(n,total) in expected.items():
@@ -115,11 +115,16 @@ class CurrentAnalysisTests(unittest.TestCase):
 
     @unittest.skipUnless(importlib.util.find_spec('matplotlib'), 'plotting dependency not installed')
     def test_current_plot_targets(self):
-        from pipeline.current_figures.replay import PLOTS,MANUAL
+        from pipeline.current_figures.replay import PLOTS,MANUAL,OPTIONAL_PLOTS
         self.assertIn('Fig2c',PLOTS);self.assertNotIn('Fig2b',PLOTS)
-        self.assertIn('SupFig8c',PLOTS);self.assertNotIn('Fig3e',PLOTS)
+        self.assertIn('SupFig7c',PLOTS);self.assertNotIn('Fig3e',PLOTS)
+        self.assertIn('SupFig1',PLOTS);self.assertNotIn('SupFig1a',PLOTS)
+        self.assertNotIn('SupFig8a',PLOTS)
         self.assertIn('Fig4f',MANUAL)
-        self.assertEqual(len([k for k in PLOTS if k.startswith('SupFig4')]),5)
+        self.assertEqual(len([k for k in PLOTS if k.startswith('SupFig4')]),4)
+        self.assertEqual(len(PLOTS),40)
+        self.assertEqual(len(OPTIONAL_PLOTS),5)
+        self.assertTrue(all(k.startswith('SuppTable2_') for k in OPTIONAL_PLOTS))
 
     @unittest.skipUnless(importlib.util.find_spec('matplotlib'), 'plotting dependency not installed')
     def test_benchmark_go_original_selection(self):

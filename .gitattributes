@@ -1,0 +1,2 @@
+# Preserve source-data checksums across platforms, including CRLF CSV records.
+*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

@@ -1,5 +1,5 @@
 profile: "strict401-manuscript-v12"
-publication_status: "local working profile; no published release/tag/DOI asserted"
+publication_status: "Version 1.1.2; GitHub publication is checked independently; no archival DOI asserted"
 random_seed: 42
 frozen_model_manifest: "data/frozen_model/manifest.json"
 current_model_cli: "pipeline/modeling/strict_runtime.py"
@@ -45,17 +45,18 @@ database:
   human_records: 20075
   mouse_records: 17002
   total_records: 37077
-  scored_records: 33971
-  missing_score_records: 3106
+  scored_records: 37077
+  missing_score_records: 0
+  human_score_ge_0_98_all_groups: 1344
   runtime_fields: 14
   representative_query:
-    keyword: "DNA topoisomerase"
-    species: "Human"
-    reviewed_status: "reviewed"
-    minimum_prediction_score: 0.98
+    keyword: ""
+    species: "all"
+    reviewed_status: "all"
+    minimum_prediction_score: 0
     operator: ">="
-    sort: "confidence_desc"
-    matched_records: 6
-    example_gene: "TOP1"
-    example_uniprot_accession: "P11387"
-    example_prediction_score: 0.9999898352225621
+    sort: "id_asc"
+    matched_records: 37077
+    visible_records: 6
+    visible_novel_candidates: 0
+    evidence_group_semantics: "original frozen-analysis membership, not current scoring status"

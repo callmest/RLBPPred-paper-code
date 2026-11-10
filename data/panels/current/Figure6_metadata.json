@@ -1,37 +1,36 @@
 {
   "figure": "Figure 6",
-  "purpose": "Illustrative human database query, not a list of six novel candidates",
+  "purpose": "Default unfiltered annotation browser, first six records with current strict-model scores",
   "query": {
-    "keyword": "DNA topoisomerase",
-    "species": "Human",
-    "reviewed_status": "reviewed",
-    "minimum_prediction_score": 0.98,
-    "comparison": ">=",
+    "keyword": "",
+    "species": "all",
+    "reviewed_status": "all",
+    "minimum_prediction_score": 0,
+    "comparison": "confidence >= minimum_prediction_score",
     "exact_uniprot_id": false,
-    "sort": "confidence_desc",
-    "rows_per_page": 20
+    "sort": "id_asc",
+    "rows_per_page": 50
   },
   "coverage": {
     "total_annotation_records": 37077,
     "human_annotation_records": 20075,
     "mouse_annotation_records": 17002,
-    "strict_scored_records": 33971,
-    "human_strict_scored": 16969,
+    "strict_scored_records": 37077,
+    "human_strict_scored": 20075,
     "mouse_strict_scored": 17002,
-    "unscored_human_records": 3106
+    "unscored_human_records": 0
   },
-  "matched_records": 6,
+  "matched_records": 37077,
   "genes_in_display_order": [
-    "TOP2B",
-    "TOP2A",
-    "TOP1",
-    "TOPBP1",
-    "TOP3A",
-    "TOP3B"
+    "TMA7B",
+    "NUDT4B",
+    "IGKV3-7",
+    "IGKV1D-42",
+    "IGLV4-69",
+    "IGLV8-61"
   ],
   "display_score_decimal_places": 6,
-  "query_contains_one_novel_candidate": "TOP3B",
-  "human_all_groups_score_ge_0_98": 1309,
+  "human_all_groups_score_ge_0_98": 1344,
   "human_untrained_pool_score_ge_0_98": 401,
   "model": "Strictly curated SaProt-650M-AF2 + 300-member MLP ensemble",
   "human_calibration": {
@@ -49,10 +48,47 @@
   },
   "source_prediction_hashes": {
     "human_all_predictions.csv": "b64abe9d101049c3c913e359b4f8c82878b19835ddb4a0cbc8a5b2b4efe1ed4a",
-    "mouse_all_predictions.csv": "b946a9ca1acc8710aa62bb75e4243875bd5ad1143d0c17d773cf9dd9e87dad6d"
+    "mouse_all_predictions.csv": "b946a9ca1acc8710aa62bb75e4243875bd5ad1143d0c17d773cf9dd9e87dad6d",
+    "strict_missing_scores_20261110/predictions.csv": "fb52e52f14e1398614175a88b5f0b656e5727a63fcc4cff1f3e4c118334312d8"
   },
   "candidate_list_sha256": "ffb2e3faad39de5c99fc7cf0c731c157e3d8fa28c8f9513847bc7a52bc6b6284",
-  "runtime_json_sha256": "d9b0ecfc0368531cc2b63855bb401a09d3314baa0a740e78b01ad595c0367cb5",
-  "runtime_csv_sha256": "e5100e03acd88ebaeeb586431e6bfa3c957e522ca2752a41e8ca4d0aadc96c5e",
-  "query_source_data_sha256": "f9436709ce8b38df993bb70529bbf366333b8d262fb500c618dd7d4795c713ff"
+  "runtime_json_sha256": "e69d4d6afa3739792a02e315c8b7f41f88a12a60ff915cfc6a64971e8179c452",
+  "runtime_csv_sha256": "3db4a5d78f491f011abf26d158dc26072ed31c3df473c317aa9d9b4c7b40d5e1",
+  "query_source_data_sha256": "d6435e372a393f7fe02da99e2263c93f9ed88d199df086319a19afc2299a2671",
+  "capture": {
+    "captured_utc": "2026-11-10T09:44:14.062Z",
+    "source": "Native Chromium lossless PNG screenshot of the live local page",
+    "image_file": "Figure6_browser_capture.png",
+    "source_pixels": [
+      3496,
+      2816
+    ],
+    "source_sha256": "75dd142ecc15e1e0b45e0de907fb4b6088d1baf3ae6f696bd10a17e24c331cfd",
+    "source_pixels_unmodified": true,
+    "jpeg_conversion": false,
+    "clip_css_pixels": {
+      "x": 43,
+      "y": 396,
+      "width": 874,
+      "height": 707
+    },
+    "device_scale_factor": 4,
+    "browser_version": "149.0.7827.55",
+    "website_text_and_logic_unchanged": true,
+    "source_ai_embedded_no_external_links": true,
+    "pdf_compression": "Lossless ZIP8BIT without downsampling",
+    "png_export_dpi": 500,
+    "default_view_controls": true,
+    "all_eight_columns_visible": true,
+    "visible_rows": 6,
+    "home_page_image": "Database_home_academic.jpg",
+    "stylesheet": "Figure6_academic_style.css",
+    "website_deployment": "Local only",
+    "github_push": false
+  },
+  "visible_records": 6,
+  "page_number": 1,
+  "total_pages": 742,
+  "source_data_scope": "First six visible records from the first page; not the complete page or the candidate set",
+  "visible_novel_candidate_count": 0
 }

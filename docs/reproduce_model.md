@@ -151,7 +151,7 @@ resume or reuse of an existing output directory.
 ```bash
 python -m pipeline.analysis.current_frozen_analysis \
   --streme-dir data/frozen_analysis/streme401 \
-  --go-csv data/panels/current/SupplementaryFigure8_all_GO.csv
+  --go-csv data/panels/current/SupplementaryFigure7_all_GO.csv
 ```
 
 This parses already completed STREME output and verifies frozen GO summaries;
@@ -179,6 +179,7 @@ frozen strict scores to an existing trusted runtime annotation snapshot:
 python pipeline/database/update_runtime_scores.py \
   --annotations-json /trusted/path/rlbp_annotations.json \
   --human-predictions data/frozen_model/human_all_predictions.csv \
+  --human-supplement data/database_completion/human_additional_predictions.csv \
   --mouse-predictions data/frozen_model/mouse_all_predictions.csv \
   --output-dir outputs/new_database_snapshot
 ```
@@ -189,12 +190,22 @@ build manifest. It rejects duplicate prediction IDs, invalid scores, unmatched
 prediction IDs and unexpected runtime fields. Missing strict scores become JSON
 null/CSV blank, never zero or a retained historical score. CSV/JSON preserve full
 precision; six-decimal formatting belongs only in the browser UI.
+The optional human supplement must be disjoint from all original human IDs;
+overlap is rejected, even for an identical value. Omitting that argument
+deliberately reconstructs earlier frozen-score coverage, not the current complete
+database. The supplement is an existing fixed-model output; the merge command
+does not run inference or change model weights.
 
-Expected current coverage is 37,077 records: human 20,075 (16,969 scored and
-3,106 unscored), mouse 17,002 (all scored). The 401 discovery candidates are not
-the same as all database proteins above 0.98. The Figure 6 query returns six
-reviewed human "DNA topoisomerase" matches sorted by descending score; only
-TOP3B belongs to the 401 discovery set.
+Current database coverage is 37,077 scored records: 20,075 human and 17,002
+mouse, with zero missing scores. The original frozen human prediction CSV
+contains 16,969 records; the additional 3,106 human scores are a separate
+database-completion snapshot and must not replace that frozen analysis file.
+The 401 discovery candidates remain the >=0.98 subset of the original scored
+untrained-proteome pool. They are not the 1,344 human database records above
+0.98 across all evidence groups. Figure 6 shows the first six records of the
+default unfiltered browser view, with no displayed novel candidates.
+Its `evidence_group=not_scored` labels original frozen-analysis membership;
+the current `confidence` values of those rows are present.
 
 This operation does not overwrite or deploy the separate RLBPPredDB website.
 Live annotation construction remains dependent on exact external snapshots.

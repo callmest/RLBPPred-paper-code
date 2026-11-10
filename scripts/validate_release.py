@@ -8,6 +8,7 @@ import importlib.util
 import json
 import math
 from pathlib import Path
+import sys
 
 import numpy as np
 import pandas as pd
@@ -51,6 +52,8 @@ def metrics_from_scores(labels, scores):
 
 def run_checks(root, source_workbook=None):
     root = Path(root).resolve()
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
     data = root / "data/panels/current"
     frozen = root / "data/frozen_model"
     results = []
@@ -147,7 +150,7 @@ def run_checks(root, source_workbook=None):
         check("exclusion union and overlap", (exdepth > 0).sum() == 7674 and (exdepth == 1).sum() == 5693 and (exdepth == 3).sum() == 361)
         check("Sup1 includes reviewed proteome", "Human Proteome" in csv("SupplementaryFigure1a") and len(csv("SupplementaryFigure1a")) == 20435)
 
-        performance = csv("SupplementaryFigure4")
+        performance = csv("SupplementaryTable2")
         best = performance[(performance.Representation == "SaProt AF2") & (performance.Classifier == "MLP")]
         keys = ["AUROC","AUPRC","F1","Precision","Recall","MCC","ACC"]
         vals = [metrics[k] for k in ["auroc","auprc","f1","precision","recall","mcc","accuracy"]]
@@ -156,7 +159,7 @@ def run_checks(root, source_workbook=None):
         legacy = pd.read_csv(root / "data/panels/SuppFigure2b.csv")
         others = ~((performance.Representation == "SaProt AF2") & (performance.Classifier == "MLP"))
         check("other 59 model records preserved", performance.loc[others].reset_index(drop=True).equals(legacy.loc[others].reset_index(drop=True)))
-        for current, old in [("SupplementaryFigure5a","SuppFigure2c_ratio"),("SupplementaryFigure5b","SuppFigure2c_rounds"),("SupplementaryFigure5cd","SuppFigure2d")]:
+        for current, old in [("SupplementaryFigure4a","SuppFigure2c_ratio"),("SupplementaryFigure4b","SuppFigure2c_rounds"),("SupplementaryFigure4cd","SuppFigure2d")]:
             previous = pd.read_csv(root / "data/panels" / (old + ".csv"), float_precision="round_trip")
             check("independent robustness preserved:" + current, csv(current).equals(previous))
         for panel, control in [("Figure3a",.9001),("Figure3b",.968)]:
@@ -168,17 +171,32 @@ def run_checks(root, source_workbook=None):
             check("independent ROC control preserved:" + panel, a.shape == b.shape and close(a,b))
 
         labelmaps = [
-            (human, "Figure3c", "SupplementaryFigure6c", ["sig_pos_ids","potential_positive","untrained_proteome","neg_ids"]),
-            (mouse, "Figure3d", "SupplementaryFigure6d", ["significant_positive","potential_positive","negative"])]
-        for scores, mean_panel, rate_panel, labels in labelmaps:
-            means, rates = csv(mean_panel), csv(rate_panel)
-            group_means = [scores.loc[scores.dataset == name,"probability"].mean() for name in labels]
+            (human, "Figure3c", "SupplementaryFigure5c", ["sig_pos_ids","potential_positive","untrained_proteome","neg_ids"]),
+            (mouse, "Figure3d", "SupplementaryFigure5d", ["significant_positive","potential_positive","negative"])]
+        distribution = load_module(root / "pipeline/current_figures/score_distributions.py", "distribution_validation")
+        for scores, distribution_panel, rate_panel, labels in labelmaps:
+            bins, rates = csv(distribution_panel), csv(rate_panel)
+            distribution.validate_bins(bins, distribution_panel)
             group_ns = [int((scores.dataset == name).sum()) for name in labels]
             group_rates = [(scores.loc[scores.dataset == name,"probability"] >= .5).mean()*100 for name in labels]
-            check("group means/counts:" + mean_panel, close(means.mean_probability,group_means) and means.sample_size.tolist() == group_ns)
+            for name, n in zip(labels, group_ns):
+                block = bins.loc[bins.dataset == name].sort_values("bin_left")
+                counts, _ = np.histogram(scores.loc[scores.dataset == name, "probability"], bins=np.arange(21)/20)
+                check("distribution bins/counts:" + distribution_panel + ":" + name,
+                      block.protein_count.tolist() == counts.tolist() and block.n.eq(n).all()
+                      and close(block.within_group_percentage, counts*100/n))
+                xx, yy = distribution.pchip(block.bin_center, block.within_group_percentage)
+                check("PCHIP exact knots/no extrapolation:" + distribution_panel + ":" + name,
+                      len(xx) == 381 and close(xx[::20],block.bin_center)
+                      and np.array_equal(yy[::20],block.within_group_percentage.to_numpy())
+                      and close([xx[0],xx[-1]],[.025,.975]))
             check("group calls >=0.5:" + rate_panel, close(rates.percentage_positive,group_rates) and rates.sample_size.tolist() == group_ns)
-        check("held-out confusion data", csv("SupplementaryFigure6a")["count"].tolist() == [1732,89,4,71])
-        scan = csv("SupplementaryFigure6b")
+        from pipeline.current_figures.replay import PLOTS, OPTIONAL_PLOTS
+        check("current figure registry", len(PLOTS) == 40 and "SupFig8a" not in PLOTS
+              and len([p for p in PLOTS if p.startswith("SupFig4")]) == 4
+              and set(OPTIONAL_PLOTS) == {"SuppTable2_"+m for m in ["AUROC","F1","MCC","Precision","Recall"]})
+        check("held-out confusion data", csv("SupplementaryFigure5a")["count"].tolist() == [1732,89,4,71])
+        scan = csv("SupplementaryFigure5b")
         negatives = validation.loc[validation.label == 0,"probability"].to_numpy()
         pool = human.loc[human.dataset == "untrained_proteome","probability"].to_numpy()
         check("threshold grid", close(scan.threshold,np.linspace(.5,1,101)))
@@ -197,7 +215,7 @@ def run_checks(root, source_workbook=None):
         llps_candidates = llps.loc[llps.Group == "Novel predicted RLBPs"]
         check("401 LLPS counts and union", llps_candidates["Overlap count"].tolist() == [27,172,8,2,183] and set(llps_candidates["Group total"]) == {401})
         check("401 LLPS percentages", close(llps_candidates["Overlap (%)"],llps_candidates["Overlap count"]/401*100))
-        epi_union = csv("SupplementaryFigure7a").iloc[0]
+        epi_union = csv("SupplementaryFigure6a").iloc[0]
         check("401 EpiFactors union", epi_union["EpiFactors-annotated"] == 63 and epi_union["Group total"] == 401)
 
         disorder = csv("Figure5c_raw")
@@ -208,7 +226,7 @@ def run_checks(root, source_workbook=None):
         e = motifs["E-value"].to_numpy()
         check("STREME reported/significant/displayed", len(e) == 13 and (e < .05).sum() == 7 and (e <= 1.2).sum() == 11)
         check("STREME exact display flags", motifs["Displayed (E ≤ 1.2)"].eq("Yes").tolist() == (e <= 1.2).tolist())
-        comp = csv("SupplementaryFigure7c")
+        comp = csv("SupplementaryFigure6c")
         check("motif composition groups", comp.iloc[:,1:].values.tolist() == [[3,3],[4,6],[0,2]])
         streme_dir = root / "data/frozen_analysis/streme401"
         streme_meta = json.loads((streme_dir / "manifest.json").read_text())
@@ -220,10 +238,10 @@ def run_checks(root, source_workbook=None):
         check("STREME text/XML agreement", len(xml) == len(txt) == 13 and all((a["consensus"],a["width"],a["e_value"],a["unique_candidate_proteins"]) == (b["consensus"],b["width"],b["e_value"],b["nsites"]) for a,b in zip(xml,txt)))
         check("STREME raw/panel E-values", close([r["e_value"] for r in xml],e))
         check("STREME independent composition", offline.motif_summary(xml)["groups"] == {"Cys-containing":{"significant":3,"displayed":3},"Lys/Arg-rich":{"significant":4,"displayed":6},"Other sequences":{"significant":0,"displayed":2}})
-        aa = csv("SupplementaryFigure7d")
+        aa = csv("SupplementaryFigure6d")
         check("AA composition count/sums", len(aa) == 60 and close(aa.groupby("Protein group")["Pooled percentage (%)"].sum(), [100]*3))
         check("AA residue denominators", sorted(aa["Standard residues (total)"].unique()) == [234811,240972,4356393])
-        go = csv("SupplementaryFigure8_all_GO")
+        go = csv("SupplementaryFigure7_all_GO")
         check("complete GO family and subsets", len(go) == 3082 and (go.q_bh < .05).sum() == 88 and go.plot_selected.sum() == 18)
         check("GO foreground/background", set(go.n) == {401} and set(go.bg_n) == {5237})
         check("GO aspect tests", go.groupby("aspect").size().to_dict() == {"BP":1908,"CC":508,"MF":666})
@@ -238,11 +256,50 @@ def run_checks(root, source_workbook=None):
 
         query = csv("Figure6_query")
         meta = json.loads((data / "Figure6_metadata.json").read_text())
-        check("database query identities", query.gene_name.tolist() == ["TOP2B","TOP2A","TOP1","TOPBP1","TOP3A","TOP3B"])
-        check("database query scores", all(close(r.confidence,human.set_index("protein_id").loc[r.uniprot_id,"probability"],1e-8) for r in query.itertuples()))
-        check("database query is not six novel candidates", query.novel_candidate_401.astype(str).str.lower().eq("true").sum() == 1 and bool(query.iloc[-1].novel_candidate_401))
-        check("database coverage metadata", meta["coverage"]["total_annotation_records"] == 37077 and meta["coverage"]["strict_scored_records"] == 33971 and meta["coverage"]["unscored_human_records"] == 3106)
+        completion_dir = root / "data/database_completion"
+        completion_meta = json.loads((completion_dir / "manifest.json").read_text())
+        completion_path = completion_dir / completion_meta["file"]
+        completion = pd.read_csv(completion_path, float_precision="round_trip")
+        check("database completion file identity", sha(completion_path) == completion_meta["sha256"]
+              == meta["source_prediction_hashes"]["strict_missing_scores_20261110/predictions.csv"]
+              and completion_path.stat().st_size == completion_meta["bytes"])
+        check("database completion disjoint exact coverage", len(completion) == 3106
+              and completion.protein_id.nunique() == 3106
+              and not set(completion.protein_id) & set(human.protein_id))
+        check("database completion fixed model", completion_meta["source_checkpoint_sha256"]
+              == "72875c9414f9f3705b9437ce2c2b088257810b737464ab2fb332a0df7406aa41"
+              and completion_meta["model_retrained"] is False)
+        completed_human = pd.concat([human[["protein_id","probability"]],
+                                     completion[["protein_id","probability"]]], ignore_index=True)
+        check("database complete human score coverage", len(completed_human) == 20075
+              and completed_human.protein_id.nunique() == 20075
+              and completed_human.probability.between(0,1).all()
+              and int(completed_human.probability.ge(.98).sum()) == 1344
+              and int(completion.probability.ge(.98).sum()) == 35)
+        check("database query identities", query.gene_name.tolist() == ["TMA7B","NUDT4B","IGKV3-7","IGKV1D-42","IGLV4-69","IGLV8-61"])
+        complete_lookup = completed_human.set_index("protein_id").probability
+        check("database query full-precision scores", all(
+            r.species == "Human" and r.uniprot_id in complete_lookup.index
+            and float(r.confidence) == float(complete_lookup.loc[r.uniprot_id])
+            for r in query.itertuples()))
+        check("database original frozen membership labels", all(
+            r.evidence_group == (human.set_index("protein_id").dataset.loc[r.uniprot_id]
+                                 if r.uniprot_id in set(human.protein_id) else "not_scored")
+            for r in query.itertuples()))
+        check("database default-view metadata", meta["query"]["keyword"] == ""
+              and meta["query"]["species"] == "all" and meta["query"]["minimum_prediction_score"] == 0
+              and meta["query"]["sort"] == "id_asc" and meta["matched_records"] == 37077)
+        check("database query contains no novel candidates", query.novel_candidate_401.astype(str).str.lower().eq("true").sum() == 0 and meta["visible_novel_candidate_count"] == 0)
+        check("database coverage metadata", meta["coverage"]["total_annotation_records"] == 37077
+              and meta["coverage"]["strict_scored_records"] == 37077
+              and meta["coverage"]["human_strict_scored"] == 20075
+              and meta["coverage"]["mouse_strict_scored"] == 17002
+              and meta["coverage"]["unscored_human_records"] == 0
+              and meta["human_all_groups_score_ge_0_98"] == 1344
+              and meta["human_untrained_pool_score_ge_0_98"] == 401)
         check("database strict score provenance", meta["source_prediction_hashes"]["human_all_predictions.csv"] == sha(frozen/"human_all_predictions.csv") and meta["source_prediction_hashes"]["mouse_all_predictions.csv"] == sha(frozen/"mouse_all_predictions.csv"))
+        check("database runtime snapshot hashes", meta["runtime_json_sha256"] == completion_meta["runtime_json_sha256"]
+              and meta["runtime_csv_sha256"] == completion_meta["runtime_csv_sha256"])
         check("current data profile excludes historical panels", not any(p.name in {"Figure3e.csv","SuppFigure1c.csv","Figure index.csv"} for p in data.iterdir()))
         return verified
 

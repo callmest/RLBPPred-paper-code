@@ -32,22 +32,37 @@ is 300 dpi; `--dpi 500` changes raster resolution without altering values.
 | Fig1d | Figure1d.csv | Positive/negative GO enrichment, top five significant terms per aspect and direction |
 | Fig2c | Figure2c.csv | Ten classifiers x six representations; current strict MLP value, other 59 unchanged |
 | Fig3a-b | Figure3a.csv, Figure3b.csv | Strict-model ROC versus separate unfiltered/RF controls |
-| Fig3c-d | Figure3c.csv, Figure3d.csv | Mean human/mouse scores, not discovery counts |
+| Fig3c-d | Figure3c.csv, Figure3d.csv | Seven within-group score distributions: 20 equal-width bins, 140 frequency knots and shape-preserving cubic interpolation (PCHIP); not group-mean bars or candidate counts |
 | Fig5a-b | Figure5a.csv, Figure5b.csv | Chromatin-category and LLPS database overlaps |
 | Fig5c | Figure5c_raw/summary/stats.csv | Disorder: 401/376/9,059 observed proteins; 50 negative values missing |
 | Fig5d | Figure5d.csv | 11 displayed motifs, only 7 significant; all 13 retained in source table |
-| SupFig1a | SupplementaryFigure1a.csv | Benchmark exclusion membership |
+| SupFig1 | SupplementaryFigure1a.csv | Single-panel benchmark exclusion membership; historical CSV name retained |
 | SupFig2a-f, SupFig3a-f | SupplementaryFigure2_3_umap.csv | Frozen UMAP coordinates, no refitting |
-| SupFig4a-e | SupplementaryFigure4.csv | AUROC/F1/MCC/precision/recall across all 60 combinations |
-| SupFig5a-d | SupplementaryFigure5a/b/cd.csv | Independent sampling-configuration experiments, not final-model replacements |
-| SupFig6a-d | SupplementaryFigure6a/b/c/d.csv | Confusion matrix, threshold/FPR scan and human/mouse calls at 0.5 |
-| SupFig7a-d | SupplementaryFigure7a/b/c/d.csv | EpiFactors, descriptive motif groups and pooled amino-acid composition |
-| SupFig8a-c | SupplementaryFigure8_all_GO.csv | Selected 18 terms from all 3,082 tests; 88 significant |
-| Fig6 evidence only | Figure6_query.csv, Figure6_metadata.json | Six-record local database query, scores and snapshot provenance |
+| Supplementary Table 2 | SupplementaryTable2.csv | All 60 representation/classifier combinations; performance heatmaps are no longer current SI figures |
+| SupFig4a-d | SupplementaryFigure4a/b/cd.csv | Independent sampling-configuration experiments, not final-model replacements |
+| SupFig5a-d | SupplementaryFigure5a/b/c/d.csv | Confusion matrix, threshold/FPR scan and human/mouse calls at 0.5 |
+| SupFig6a-d | SupplementaryFigure6a/b/c/d.csv | EpiFactors, descriptive motif groups and pooled amino-acid composition |
+| SupFig7a-c | SupplementaryFigure7_all_GO.csv | Selected 18 terms from all 3,082 tests; 88 significant |
+| Fig6 evidence only | Figure6_query.csv, Figure6_metadata.json | First six records of the default unfiltered local database view, scores and snapshot provenance; zero displayed novel candidates |
 
-The registry generates 45 quantitative panels. Fig1c, Fig2a-b, Fig4 and Fig6
+The default registry generates 40 quantitative panels. Fig1c, Fig2a-b, Fig4 and Fig6
 require separately supplied manual/experimental/browser assets.
 The old Fig3e and domain-enrichment supplement are not current panels.
+
+For optional diagnostic heatmaps of the complete performance table, use
+`--figure SuppTable2_AUROC` (also F1, MCC, Precision or Recall). These outputs
+are excluded from `--all` and are not numbered as manuscript SI figures.
+Historical workbook tab names are deliberately retained; the explicit panel
+map assigns them to the current displayed numbers rather than treating tab
+names as current figure identities.
+
+Figure 3c–d bin percentages are normalized separately within each evidence
+group. The final 0.95–1.00 bin includes 1 and is not the >=0.98 candidate count.
+PCHIP preserves the 20 frequency knots per group, uses 381 plotted coordinates
+per group and runs only between the first/last bin centers (0.025–0.975), with
+no extrapolation, threshold filtering, density estimation or statistical
+smoothing. Original human positive/negative groups include both training and
+held-out proteins. Frozen per-protein probabilities remain in `data/frozen_model/`.
 
 For Fig1b, source sizes are GO 7,050, domain 1,785 and R-loopBase 1,181 unique
 proteins (1,182 original nonblank rows include a duplicate). Union=7,674,
